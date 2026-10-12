@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 101 — AI in Practice</title>
+  <meta name="description" content="A short, interactive walk-through of how AI is used in a real scenario." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- 1. Floating translucent nav: content scrolls underneath it (apple-design §12) -->
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top">AI 101</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#scenario">Scenario</a>
+      <a href="#steps">Steps</a>
+      <a href="#try">Try it</a>
+      <a href="#takeaways">Takeaways</a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- 2. Hero: one idea, big type, one action -->
+    <section class="hero">
+      <p class="eyebrow reveal">AI in practice</p>
+      <h1 class="display reveal">Your headline goes here.</h1>
+      <p class="lead reveal">One clear sentence that says what this site helps people understand.</p>
+      <div class="hero__actions reveal">
+        <a class="btn btn--primary" href="#scenario">See the scenario</a>
+        <a class="btn btn--ghost" href="#try">Try it</a>
+      </div>
+    </section>
+
+    <!-- 3. Scenario: set the scene -->
+    <section class="section" id="scenario">
+      <p class="eyebrow reveal">The scenario</p>
+      <h2 class="title reveal">Meet [persona].</h2>
+      <p class="body reveal">
+        Describe the situation here: who they are, what problem they face, and what
+        “before AI” looks like.
+      </p>
+    </section>
+
+    <!-- 4. Steps: cards are generated from data in js/main.js -->
+    <section class="section" id="steps">
+      <p class="eyebrow reveal">How AI helps</p>
+      <h2 class="title reveal">Step by step.</h2>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <!-- 5. Interactive demo: a draggable sheet (springs, momentum, rubber-banding) -->
+    <section class="section" id="try">
+      <p class="eyebrow reveal">Interactive</p>
+      <h2 class="title reveal">Try it yourself.</h2>
+      <p class="body reveal">Drag the card and let go. Flick it, and it keeps its momentum.</p>
+      <div class="stage reveal" id="stage">
+        <div class="sheet" id="sheet" tabindex="0" role="group" aria-label="Draggable example card">
+          <div class="sheet__grip"></div>
+          <h3>Sample output</h3>
+          <p>Replace this with a real example of what the AI produced in your scenario.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Takeaways -->
+    <section class="section" id="takeaways">
+      <p class="eyebrow reveal">Takeaways</p>
+      <h2 class="title reveal">What to remember.</h2>
+      <ul class="list reveal">
+        <li>Takeaway one.</li>
+        <li>Takeaway two.</li>
+        <li>Takeaway three.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>AI 101 · Built with plain HTML, CSS and JavaScript.</p>
+  </footer>
+
+</body>
+</html>
