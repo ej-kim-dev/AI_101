@@ -55,6 +55,10 @@ The page is one continuous scroll, with each section filling one screen. It was 
 
 Key phrases are written as `==like this==` in `js/content.js`. They appear bold and darken as the section comes into view.
 
+## Design template
+
+The design is saved as a reusable template in [`design-template/`](design-template/): the rules (`SKILL.md`, which also works as a Claude skill) and a starter page to copy for new projects.
+
 ## Files
 
 | File | What it holds |
