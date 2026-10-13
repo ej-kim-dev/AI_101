@@ -1,149 +1,299 @@
 /* =========================================================
-   AI 101 — behaviour
-   1. CONTENT  — edit this to match your scenario
-   2. Render cards from the content
-   3. Scroll reveal
-   4. Active nav link
-   5. Draggable sheet (spring + momentum + rubber-band)
+   Draws the presentation from CONTENT (js/content.js).
+
+   1. State      — which version and language are selected
+   2. Helpers    — pick the right variant, escape text
+   3. Drawings   — small line icons (inline SVG)
+   4. Sections   — one function per part of the presentation
+   5. Controls   — the two sliders
    ========================================================= */
 
-/* ---------- 1. CONTENT ----------
-   Replace these with the steps from your scenario. */
-const STEPS = [
-  { title: "Step one",   text: "What the person does, and what AI does for them." },
-  { title: "Step two",   text: "The next stage of the workflow." },
-  { title: "Step three", text: "The result, and why it matters." },
-];
+/* ---------- 1. State ----------
+   Defaults: School + English. A link like ?view=company&lang=ko
+   opens a specific version, which is handy when presenting. */
+const params = new URLSearchParams(location.search);
+const state = {
+  view: params.get("view") === "company" ? "company" : "school",
+  lang: params.get("lang") === "ko" ? "ko" : "en",
+};
 
-/* ---------- 2. Render cards ---------- */
-const cards = document.getElementById("cards");
-cards.innerHTML = STEPS.map((s, i) => `
-  <article class="card reveal">
-    <span class="card__num">0${i + 1}</span>
-    <h3>${s.title}</h3>
-    <p>${s.text}</p>
-  </article>`).join("");
+/* ---------- 2. Helpers ---------- */
 
-/* ---------- 3. Scroll reveal ----------
-   IntersectionObserver tells us when an element enters the viewport. */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach((e) => {
-    if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+// A value may be { school, company } — return the one for the current view.
+const pick = (value) =>
+  value && typeof value === "object" && "school" in value ? value[state.view] : value;
+
+// Make text safe to put inside HTML.
+const esc = (text) =>
+  String(text).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* ---------- 3. Drawings ----------
+   48×48 line icons. They use currentColor, so they follow the theme.
+   They are decorative (aria-hidden): the text beside them says the same thing. */
+const ICONS = {
+  teacher: '<circle cx="17" cy="15" r="6"/><path d="M6 42v-6a11 11 0 0 1 22 0v6"/><rect x="30" y="7" width="14" height="11" rx="1.5"/><path d="M26 27l7-9"/>',
+  employee: '<circle cx="24" cy="13" r="6.5"/><path d="M11 43v-7a13 13 0 0 1 26 0v7"/><path d="M24 25l-2.5 4 2.5 9 2.5-9z"/>',
+  chat: '<path d="M8 8h21a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H17l-6 5v-5H8a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3z"/><path d="M36 17h4a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2v5l-6-5h-9a3 3 0 0 1-3-3v-1"/>',
+  classroom: '<rect x="8" y="6" width="32" height="19" rx="2"/><path d="M14 12h12M14 18h8"/><path d="M8 33h12M28 33h12M11 33v8M17 33v8M31 33v8M37 33v8"/>',
+  workspace: '<path d="M4 34h40M9 34v8M39 34v8"/><rect x="7" y="17" width="15" height="11" rx="1.5"/><rect x="26" y="17" width="15" height="11" rx="1.5"/><path d="M14.5 28v6M33.5 28v6"/>',
+  books: '<rect x="7" y="9" width="8" height="31" rx="1"/><rect x="17" y="13" width="8" height="27" rx="1"/><path d="M28 14l7-2 7 26-7 2z"/><path d="M7 15h8M17 19h8"/>',
+  documents: '<path d="M14 6h14l8 8v24a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M28 6v8h8"/><path d="M17 22h14M17 27h14M17 32h9"/><path d="M8 12v28a4 4 0 0 0 4 4h20"/>',
+  bookshelf: '<rect x="6" y="5" width="36" height="38" rx="2"/><path d="M6 24h36"/><path d="M11 9v15M15.5 11v13M20 9v15M26 12l4.5 12"/><path d="M11 28v15M16 30v13M21 28v15M33 30v13"/>',
+  cabinet: '<rect x="10" y="4" width="28" height="40" rx="2"/><path d="M10 17.5h28M10 30.5h28"/><path d="M21 11h6M21 24h6M21 37h6"/>',
+  board: '<rect x="5" y="6" width="38" height="27" rx="2"/><path d="M11 13l2 2 3-3M19 14h17M11 20l2 2 3-3M19 21h13M11 27l2 2 3-3M19 28h9"/><path d="M15 33l-4 9M33 33l4 9"/>',
+  guidelines: '<rect x="10" y="8" width="28" height="35" rx="2"/><rect x="18" y="4" width="12" height="7" rx="1.5"/><path d="M15 20l2 2 4-4M25 20h8M15 29l2 2 4-4M25 29h8M15 37h18"/>',
+  apps: '<rect x="6" y="6" width="16" height="16" rx="4"/><rect x="26" y="6" width="16" height="16" rx="4"/><rect x="6" y="26" width="16" height="16" rx="4"/><path d="M31 26v5M37 26v5M28 31h12v2a6 6 0 0 1-12 0z M34 39v5"/>',
+  outside: '<path d="M5 43V7h17v36"/><path d="M18 26h.01"/><circle cx="34" cy="12" r="4"/><path d="M34 16v12l-5 13M34 28l5 13M28 22h12"/>',
+  briefcase: '<rect x="6" y="15" width="36" height="26" rx="3"/><path d="M18 15v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M6 26h36M22 26v4h4v-4"/>',
+};
+
+const icon = (name, cls = "icon") =>
+  `<svg class="${cls}" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[pick(name)] || ""}</svg>`;
+
+// Section wrapper: every part of the presentation is a card with a heading.
+const section = (id, eyebrow, title, inner, extraClass = "") => `
+  <section class="slide ${extraClass}" id="${id}" aria-labelledby="${id}-title">
+    <p class="eyebrow">${esc(eyebrow)}</p>
+    ${title ? `<h2 class="slide__title" id="${id}-title">${esc(title)}</h2>` : ""}
+    ${inner}
+  </section>`;
+
+/* ---------- 4. Sections ---------- */
+
+// 1. Opening
+function opening(c) {
+  return `
+  <section class="slide slide--hero" id="opening" aria-labelledby="opening-title">
+    <p class="eyebrow">${esc(c.eyebrow)}</p>
+    <h1 class="hero__title" id="opening-title">${esc(c.title)}</h1>
+    <p class="lead">${esc(c.body)}</p>
+    <div class="metaphor">
+      ${icon(c.icon, "icon icon--xl")}
+      <div>
+        <p class="metaphor__text">${esc(pick(c.metaphor))}</p>
+        <p class="metaphor__note">${esc(c.metaphorNote)}</p>
+      </div>
+    </div>
+    <p class="tool-note">${esc(c.toolNote)}</p>
+  </section>`;
+}
+
+// 2. Main concepts — a numbered sequence of cards
+function concepts(c) {
+  const cards = c.items.map((item, i) => `
+    <li class="card">
+      <div class="card__top">
+        ${icon(item.icon)}
+        <span class="card__num" aria-hidden="true">${i + 1}</span>
+      </div>
+      <h3 class="card__title">
+        <span class="card__term">${esc(item.term)}<span class="sr-only">:</span></span>
+        ${esc(pick(item.title))}
+      </h3>
+      <p class="card__body">${esc(pick(item.body))}</p>
+      ${item.note ? `<p class="card__note">${esc(item.note)}</p>` : ""}
+    </li>`).join("");
+  return section("concepts", c.eyebrow, c.title, `<ol class="cards">${cards}</ol>`);
+}
+
+// 3. Chat vs. project — a small diagram made of HTML (so the text translates)
+function distinction(c) {
+  const shared = pick(c.sharedItems).map((s) => `
+    <li class="diagram__item">${icon(s.icon)}<span><strong>${esc(s.label)}</strong><small>${esc(s.sub)}</small></span></li>`).join("");
+  const chats = pick(c.chats).map((ch) => `
+    <li class="chatcard ${ch.current ? "is-current" : ""}">
+      ${icon(c.person)}
+      <span>
+        ${ch.current ? `<span class="tag">${esc(c.currentTag)}</span>` : ""}
+        <strong>${esc(ch.label)}</strong>
+        <small>${esc(ch.sub)}</small>
+      </span>
+    </li>`).join("");
+
+  return section("distinction", c.eyebrow, c.title, `
+    <figure class="diagram">
+      <div class="diagram__shared">
+        <p class="diagram__heading">${esc(pick(c.sharedTitle))}</p>
+        <ul class="diagram__list">${shared}</ul>
+      </div>
+      <p class="diagram__flow"><span class="diagram__arrow" aria-hidden="true"></span>${esc(c.flow)}</p>
+      <div class="diagram__chats">
+        <p class="diagram__heading">${esc(c.chatsTitle)}</p>
+        <ul class="diagram__list">${chats}</ul>
+      </div>
+      <figcaption class="diagram__caption">${esc(c.caption)}</figcaption>
+    </figure>
+    <p class="note">${esc(c.note)}</p>`);
+}
+
+// 4. "What should I use?" guide
+function guide(c) {
+  const options = c.options.map((o) => `
+    <li class="option">
+      ${icon(o.icon)}
+      <h3 class="option__name">${esc(o.name)}</h3>
+      <p class="option__when"><span class="label">${esc(c.useWhen)}</span>${esc(o.when)}</p>
+      <p class="option__like"><span class="label">${esc(c.likeLabel)}</span>${esc(pick(o.like))}</p>
+    </li>`).join("");
+  return section("guide", c.eyebrow, c.title, `
+    <ul class="options">${options}</ul>
+    <p class="note note--plain">${esc(c.together)}</p>`);
+}
+
+// One highlighted ingredient. The number badge is kept on the same line
+// as the first word, so it never ends up alone at the end of a line.
+function ingredient(part, c) {
+  const space = part.text.indexOf(" ");
+  const first = space === -1 ? part.text : part.text.slice(0, space);
+  const rest = space === -1 ? "" : part.text.slice(space);
+  const hint = `(${c.ingredientWord} ${part.n}: ${c.ingredients[part.n - 1].name})`;
+  return `<mark class="ing"><span class="ing__lead"><span class="ing__badge" aria-hidden="true">${part.n}</span><span class="sr-only">${esc(hint)}</span>${esc(first)}</span>${esc(rest)}</mark>`;
+}
+
+// 5. Practical example — before/after, numbered ingredients, tiny sample slide
+function example(c) {
+  const clear = c.clear.map((part) =>
+    typeof part === "string"
+      ? esc(part)
+      : ingredient(part, c)
+  ).join("");
+
+  const list = c.ingredients.map((g, i) => `
+    <li><span class="ing__badge" aria-hidden="true">${i + 1}</span><span><strong>${esc(g.name)}</strong> — ${esc(g.detail)}</span></li>`).join("");
+
+  const bullets = c.slideBullets.map((b) => `<li>${esc(b)}</li>`).join("");
+
+  return section("example", c.eyebrow, c.title, `
+    <div class="compare">
+      <div class="request request--vague">
+        <p class="request__label"><span class="request__mark" aria-hidden="true">✕</span>${esc(c.vagueLabel)}</p>
+        <p class="request__text">“${esc(c.vague)}”</p>
+      </div>
+      <div class="request request--clear">
+        <p class="request__label"><span class="request__mark" aria-hidden="true">✓</span>${esc(c.clearLabel)}</p>
+        <p class="request__text">${clear}</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">${esc(c.ingredientsTitle)}</h3>
+    <ol class="ingredients">${list}</ol>
+
+    <div class="sample">
+      <div class="sample__text">
+        <p class="sample__metaphor">${esc(pick(c.sampleMetaphor))}</p>
+        <p class="sample__why">${esc(c.sampleWhy)}</p>
+      </div>
+      <figure class="slidemock" aria-label="${esc(c.slideLabel)}">
+        <span class="slidemock__tag">${esc(c.slideTag)}</span>
+        <div class="slidemock__page">
+          <p class="slidemock__title">${esc(c.slideTitle)}</p>
+          <ul class="slidemock__bullets">${bullets}</ul>
+        </div>
+        <figcaption class="slidemock__caption">${esc(c.slideCaption)}</figcaption>
+      </figure>
+    </div>`);
+}
+
+// 6. Choose useful context
+function context(c) {
+  const checks = c.checks.map((x) => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join("");
+  return section("context", c.eyebrow, c.title, `
+    <p class="lead lead--left">${esc(c.body)}</p>
+    <ul class="checks">${checks}</ul>
+    <div class="metaphor metaphor--small">
+      ${icon(c.icon, "icon icon--lg")}
+      <p class="metaphor__text">${esc(pick(c.metaphor))}</p>
+    </div>`);
+}
+
+// 7. Main takeaway
+function takeaway(c) {
+  const steps = c.steps.map((s, i) => `
+    <li class="flow__step"><span class="flow__num" aria-hidden="true">${i + 1}</span><span class="flow__text">${esc(s)}</span>${i < c.steps.length - 1 ? '<span class="flow__arrow" aria-hidden="true">→</span>' : ""}</li>`).join("");
+  return `
+  <section class="slide slide--takeaway" id="takeaway" aria-labelledby="takeaway-title">
+    <p class="eyebrow">${esc(c.eyebrow)}</p>
+    <h2 class="sr-only" id="takeaway-title">${esc(c.eyebrow)}</h2>
+    <ol class="flow">${steps}</ol>
+    <p class="lead lead--left">${esc(c.body)}</p>
+    <div class="examples">
+      <div class="example-box"><p class="label">${esc(c.followLabel)}</p><p>${esc(c.follow)}</p></div>
+      <div class="example-box"><p class="label">${esc(c.reviewLabel)}</p><p>${esc(c.review)}</p></div>
+    </div>
+  </section>`;
+}
+
+// 8. Learn more — native <details>, so it works with keyboard and screen readers
+function more(c, wasOpen) {
+  const notes = c.notes.map((n) => `<li>${esc(n)}</li>`).join("");
+  const sources = c.sources.map((s) => `
+    <li>
+      <a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" lang="en">${esc(s.title)}<span class="sr-only"> ${esc(c.newTab)}</span><span aria-hidden="true"> ↗</span></a>
+      <span class="source__why">${esc(s.why)}</span>
+    </li>`).join("");
+  return `
+  <section class="slide slide--more" id="more" aria-label="${esc(c.summary)}">
+    <details class="more" ${wasOpen ? "open" : ""}>
+      <summary><span class="more__title">${esc(c.summary)}</span><span class="more__hint">${esc(c.hint)}</span><span class="more__chev" aria-hidden="true"></span></summary>
+      <div class="more__body">
+        <h3 class="subhead">${esc(c.notesTitle)}</h3>
+        <ul class="notes">${notes}</ul>
+        <h3 class="subhead">${esc(c.sourcesTitle)}</h3>
+        <p class="sources__intro">${esc(c.sourcesIntro)}</p>
+        <ul class="sources">${sources}</ul>
+      </div>
+    </details>
+  </section>`;
+}
+
+/* ---------- Draw everything ---------- */
+const app = document.getElementById("app");
+
+function render({ announce = false } = {}) {
+  const c = CONTENT[state.lang];
+
+  // Page-level settings
+  document.documentElement.lang = state.lang;
+  document.documentElement.dataset.view = state.view;
+  document.title = c.ui.docTitle;
+  document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = c.ui[el.dataset.t]; });
+
+  // Keep "Learn more" open if it was open before the switch
+  const wasOpen = app.querySelector("details.more")?.open ?? false;
+
+  app.innerHTML =
+    opening(c.opening) +
+    concepts(c.concepts) +
+    distinction(c.distinction) +
+    guide(c.guide) +
+    example(c.example) +
+    context(c.context) +
+    takeaway(c.takeaway) +
+    more(c.more, wasOpen);
+
+  syncControls();
+  if (announce) document.getElementById("status").textContent = c.ui.status[state.view];
+}
+
+/* ---------- 5. Controls ---------- */
+function syncControls() {
+  document.querySelectorAll(".toggle").forEach((group) => {
+    const inputs = [...group.querySelectorAll("input")];
+    inputs.forEach((input) => { input.checked = state[input.name] === input.value; });
+    // data-pos moves the sliding thumb (0 = left, 1 = right)
+    group.querySelector(".toggle__track").dataset.pos = inputs.findIndex((i) => i.checked);
   });
-}, { threshold: 0.15 });
-document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+}
 
-/* ---------- 4. Active nav link ---------- */
-const links = [...document.querySelectorAll(".nav__links a")];
-const spy = new IntersectionObserver((entries) => {
-  entries.forEach((e) => {
-    if (e.isIntersecting) {
-      links.forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === `#${e.target.id}`));
-    }
+document.querySelectorAll(".toggle input").forEach((input) => {
+  input.addEventListener("change", () => {
+    state[input.name] = input.value;   // only this setting changes; the other is kept
+    const url = new URL(location.href);
+    url.searchParams.set("view", state.view);
+    url.searchParams.set("lang", state.lang);
+    history.replaceState(null, "", url);
+    render({ announce: true });
   });
-}, { rootMargin: "-45% 0px -50% 0px" });
-document.querySelectorAll("main section[id]").forEach((s) => spy.observe(s));
-
-/* ---------- 5. Draggable sheet ----------
-   Ideas from apple-design:
-   - Pointer Events + capture: 1:1 tracking, keeps working outside the element (§2)
-   - Velocity at release, handed to a spring (§5)
-   - Momentum projection decides where it lands (§6)
-   - Rubber-band at the edges (§9)
-   - A new grab cancels the running animation and starts from the CURRENT position (§3) */
-const sheet = document.getElementById("sheet");
-const stage = document.getElementById("stage");
-const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-let pos = { x: 0, y: 0 };      // current offset from centre
-let vel = { x: 0, y: 0 };      // px/second
-let raf = null;                // running animation frame id
-let history = [];              // recent pointer samples for velocity
-
-const render = () => { sheet.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`; };
-
-// How far the sheet may travel from centre before resistance kicks in.
-const bounds = () => ({
-  x: (stage.clientWidth  - sheet.offsetWidth)  / 2,
-  y: (stage.clientHeight - sheet.offsetHeight) / 2,
 });
 
-// Resistance grows the further you pull past the edge (§9).
-function rubberband(over, dim, c = 0.55) {
-  return (over * dim * c) / (dim + c * Math.abs(over));
-}
-function limit(value, max, dim) {
-  if (value > max)  return  max + rubberband(value - max, dim);
-  if (value < -max) return -max - rubberband(-max - value, dim);
-  return value;
-}
-
-// Where would the sheet stop if it just coasted? (§6)
-const project = (v, d = 0.998) => (v / 1000) * d / (1 - d);
-
-// Critically damped spring (§4). `response` ≈ settle speed in seconds.
-function springTo(target, velocity, response = 0.4) {
-  cancelAnimationFrame(raf);
-  if (reduceMotion) { pos = { ...target }; vel = { x: 0, y: 0 }; render(); return; }
-
-  const w = (2 * Math.PI) / response;       // natural frequency
-  vel = { ...velocity };                    // carry in the finger's velocity
-  let last = performance.now();
-
-  const tick = (now) => {
-    const dt = Math.min((now - last) / 1000, 1 / 30); last = now;
-    for (const k of ["x", "y"]) {           // X and Y are independent springs (§3)
-      const accel = w * w * (target[k] - pos[k]) - 2 * w * vel[k];
-      vel[k] += accel * dt;
-      pos[k] += vel[k] * dt;
-    }
-    render();
-    const done = Math.hypot(vel.x, vel.y) < 1 && Math.hypot(target.x - pos.x, target.y - pos.y) < 0.5;
-    if (done) { pos = { ...target }; render(); } else { raf = requestAnimationFrame(tick); }
-  };
-  raf = requestAnimationFrame(tick);
-}
-
-let grab = null;
-sheet.addEventListener("pointerdown", (e) => {
-  cancelAnimationFrame(raf);                // interrupt any motion instantly
-  sheet.setPointerCapture(e.pointerId);
-  sheet.classList.add("is-dragging");
-  grab = { px: e.clientX - pos.x, py: e.clientY - pos.y };  // remember where we grabbed
-  history = [{ x: e.clientX, y: e.clientY, t: e.timeStamp }];
-});
-
-sheet.addEventListener("pointermove", (e) => {
-  if (!grab) return;
-  const b = bounds();
-  pos.x = limit(e.clientX - grab.px, b.x, stage.clientWidth);
-  pos.y = limit(e.clientY - grab.py, b.y, stage.clientHeight);
-  render();
-  history.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
-  history = history.filter((h) => e.timeStamp - h.t < 100);  // keep last ~100ms
-});
-
-function release() {
-  if (!grab) return;
-  grab = null;
-  sheet.classList.remove("is-dragging");
-
-  // Velocity from the oldest to newest recent sample.
-  const a = history[0], z = history[history.length - 1];
-  const dt = Math.max((z.t - a.t) / 1000, 0.001);
-  const v = { x: (z.x - a.x) / dt, y: (z.y - a.y) / dt };
-
-  // Project where it would coast to, then clamp inside the stage.
-  const b = bounds();
-  const clamp = (n, m) => Math.max(-m, Math.min(m, n));
-  const target = {
-    x: clamp(pos.x + project(v.x), b.x),
-    y: clamp(pos.y + project(v.y), b.y),
-  };
-  springTo(target, v);
-}
-sheet.addEventListener("pointerup", release);
-sheet.addEventListener("pointercancel", release);
-
-// Keep it inside the stage if the window is resized.
-addEventListener("resize", () => springTo({ x: 0, y: 0 }, { x: 0, y: 0 }));
+render();

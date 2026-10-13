@@ -1,85 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-view="school">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI 101 — AI in Practice</title>
-  <meta name="description" content="A short, interactive walk-through of how AI is used in a real scenario." />
+  <title>Give AI a clear assignment | AI 101</title>
+  <meta name="description" content="A beginner-friendly presentation on using AI tools like Claude, explained with school and company metaphors. Available in English and Korean." />
+  <!-- Inline icon so the browser never requests a missing /favicon.ico -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6b4f'/%3E%3Cpath d='M9 12h14M9 17h14M9 22h8' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <!-- Relative paths keep this working under a GitHub Pages subpath (/repo-name/) -->
   <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/content.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#app" data-t="skip">Skip to presentation</a>
 
-  <!-- 1. Floating translucent nav: content scrolls underneath it (apple-design §12) -->
-  <header class="nav" id="nav">
-    <a class="nav__brand" href="#top">AI 101</a>
-    <nav class="nav__links" aria-label="Sections">
-      <a href="#scenario">Scenario</a>
-      <a href="#steps">Steps</a>
-      <a href="#try">Try it</a>
-      <a href="#takeaways">Takeaways</a>
-    </nav>
+  <!-- Controls: two two-position sliders. Each is a radio group, so it works
+       with Tab + arrow keys and screen readers announce "1 of 2, selected". -->
+  <header class="controls" aria-labelledby="controls-title">
+    <h2 id="controls-title" class="sr-only" data-t="controlsTitle">Presentation settings</h2>
+    <div class="controls__inner">
+
+      <fieldset class="toggle">
+        <legend class="toggle__legend" data-t="viewLegend">Comparison</legend>
+        <div class="toggle__track" data-pos="0">
+          <input type="radio" id="view-school" name="view" value="school" checked />
+          <label for="view-school"><span class="toggle__check" aria-hidden="true">✓</span><span data-t="viewSchool">School</span></label>
+          <input type="radio" id="view-company" name="view" value="company" />
+          <label for="view-company"><span class="toggle__check" aria-hidden="true">✓</span><span data-t="viewCompany">Company</span></label>
+          <span class="toggle__thumb" aria-hidden="true"></span>
+        </div>
+      </fieldset>
+
+      <fieldset class="toggle">
+        <legend class="toggle__legend" data-t="langLegend">Language</legend>
+        <div class="toggle__track" data-pos="0">
+          <input type="radio" id="lang-en" name="lang" value="en" checked />
+          <label for="lang-en" lang="en"><span class="toggle__check" aria-hidden="true">✓</span>English</label>
+          <input type="radio" id="lang-ko" name="lang" value="ko" />
+          <label for="lang-ko" lang="ko"><span class="toggle__check" aria-hidden="true">✓</span>한국어</label>
+          <span class="toggle__thumb" aria-hidden="true"></span>
+        </div>
+      </fieldset>
+
+    </div>
   </header>
 
-  <main id="top">
+  <!-- Announces the new version to screen readers after a change -->
+  <p class="sr-only" role="status" aria-live="polite" id="status"></p>
 
-    <!-- 2. Hero: one idea, big type, one action -->
-    <section class="hero">
-      <p class="eyebrow reveal">AI in practice</p>
-      <h1 class="display reveal">Your headline goes here.</h1>
-      <p class="lead reveal">One clear sentence that says what this site helps people understand.</p>
-      <div class="hero__actions reveal">
-        <a class="btn btn--primary" href="#scenario">See the scenario</a>
-        <a class="btn btn--ghost" href="#try">Try it</a>
-      </div>
-    </section>
-
-    <!-- 3. Scenario: set the scene -->
-    <section class="section" id="scenario">
-      <p class="eyebrow reveal">The scenario</p>
-      <h2 class="title reveal">Meet [persona].</h2>
-      <p class="body reveal">
-        Describe the situation here: who they are, what problem they face, and what
-        “before AI” looks like.
-      </p>
-    </section>
-
-    <!-- 4. Steps: cards are generated from data in js/main.js -->
-    <section class="section" id="steps">
-      <p class="eyebrow reveal">How AI helps</p>
-      <h2 class="title reveal">Step by step.</h2>
-      <div class="cards" id="cards"></div>
-    </section>
-
-    <!-- 5. Interactive demo: a draggable sheet (springs, momentum, rubber-banding) -->
-    <section class="section" id="try">
-      <p class="eyebrow reveal">Interactive</p>
-      <h2 class="title reveal">Try it yourself.</h2>
-      <p class="body reveal">Drag the card and let go. Flick it, and it keeps its momentum.</p>
-      <div class="stage reveal" id="stage">
-        <div class="sheet" id="sheet" tabindex="0" role="group" aria-label="Draggable example card">
-          <div class="sheet__grip"></div>
-          <h3>Sample output</h3>
-          <p>Replace this with a real example of what the AI produced in your scenario.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. Takeaways -->
-    <section class="section" id="takeaways">
-      <p class="eyebrow reveal">Takeaways</p>
-      <h2 class="title reveal">What to remember.</h2>
-      <ul class="list reveal">
-        <li>Takeaway one.</li>
-        <li>Takeaway two.</li>
-        <li>Takeaway three.</li>
-      </ul>
-    </section>
+  <!-- The presentation is drawn here by js/main.js from js/content.js -->
+  <main id="app" tabindex="-1">
+    <noscript>
+      <p class="noscript">This presentation needs JavaScript to show its content. · 이 발표 자료를 보려면 JavaScript가 필요합니다.</p>
+    </noscript>
   </main>
 
   <footer class="footer">
-    <p>AI 101 · Built with plain HTML, CSS and JavaScript.</p>
+    <p data-t="footer">A learning presentation. Not affiliated with Anthropic or OpenAI.</p>
   </footer>
-
 </body>
 </html>
