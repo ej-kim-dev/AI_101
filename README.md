@@ -57,7 +57,7 @@ Key phrases are written as `==like this==` in `js/content.js`. They appear bold 
 
 ## Design template
 
-The design is saved as a reusable template in the private repository `ej-kim-dev/personal_projects` (folder `design-template/`): the rules (`SKILL.md`, which also works as a Claude skill) and a starter page to copy for new projects. A copy of the rules is in `.claude/skills/ej-apple-style/` so Claude follows the same design when working on this site.
+The design is saved as a reusable template in the private repository `ej-kim-dev/personal_projects` (folder `design-template/`): the rules (`SKILL.md`, which also works as a Claude skill) and a starter page to copy for new projects.
 
 ## Files
 
