@@ -21,7 +21,6 @@ const Nav = (() => {
   const indicator = nav.querySelector(".sectionnav__indicator");
   const menuButton = nav.querySelector(".sectionnav__button");
   const menu = document.getElementById("section-menu");
-  const progressBar = document.querySelector(".progress__bar");
   const status = document.getElementById("status");
 
   let current = 0;          // index of the section being read
@@ -51,7 +50,7 @@ const Nav = (() => {
     update();
   }
 
-  // Show which section is current: link style, sliding underline, phone button, progress bar.
+  // Show which section is current: link style, sliding underline, phone button.
   function update() {
     nav.querySelectorAll("a[data-index]").forEach((a) => {
       if (Number(a.dataset.index) === current) a.setAttribute("aria-current", "true");
@@ -72,9 +71,6 @@ const Nav = (() => {
 
     menuButton.querySelector(".sectionnav__count").textContent = two(current + 1);
     menuButton.querySelector(".sectionnav__name").textContent = words().sections[current];
-
-    // Progress through the page, by section.
-    progressBar.style.transform = `scaleX(${(current + 1) / SECTION_IDS.length})`;
   }
   list.addEventListener("scroll", () => update(), { passive: true });
   addEventListener("resize", () => update());

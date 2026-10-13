@@ -135,6 +135,7 @@ svg { display: block; }
 
 /* Each slider: label on the left, two-position track on the right */
 .toggle { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; align-items: center; gap: 0.7rem; }
+.toggle[hidden] { display: none; }
 .toggle__legend {
   float: left; padding: 0;
   font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); white-space: nowrap;
@@ -237,14 +238,6 @@ svg { display: block; }
 }
 .section-menu a[aria-current] { background: var(--accent-soft); font-weight: 700; }
 .section-menu a[aria-current] .idx__num { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-
-/* How far down the page you are */
-.progress { height: 2px; }
-.progress__bar {
-  display: block; height: 100%; background: var(--accent);
-  transform-origin: left center; transform: scaleX(0.125);
-  transition: transform 400ms var(--ease);
-}
 
 /* ---------- 4. Sections: full-width bands, one screen each ---------- */
 main { display: block; outline: none; }
@@ -563,8 +556,8 @@ main { display: block; outline: none; }
   .diagram__arrow::after { right: auto; top: auto; left: -5px; bottom: -2px; border: 6px solid transparent; border-top: 9px solid var(--accent); border-bottom: 0; }
 }
 @media (max-width: 700px) {
-  .controls__inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; padding-top: 0.5rem; }
-  .toggle { display: block; }
+  .controls__inner { display: flex; justify-content: center; gap: 0.5rem; padding-top: 0.5rem; }
+  .toggle { display: block; flex: 1; max-width: 22rem; }
   .toggle__legend { float: none; display: block; font-size: 0.75rem; margin-bottom: 0.2rem; }
   .toggle__track { width: auto; }
   .toggle__track label { min-height: 44px; font-size: 0.9375rem; padding: 0.2rem 0.4rem; gap: 0.2rem; }
@@ -580,6 +573,12 @@ main { display: block; outline: none; }
   }
   .examples { grid-template-columns: 1fr; }
   .slide__num { font-size: 2.5rem; }
+}
+/* Phones with just one switch showing: keep its label on the same line */
+@media (max-width: 700px) {
+  .controls__inner:has(.toggle[hidden]) .toggle:not([hidden]) { display: flex; align-items: center; gap: 0.75rem; }
+  .controls__inner:has(.toggle[hidden]) .toggle__legend { float: left; margin: 0; font-size: 0.8125rem; }
+  .controls__inner:has(.toggle[hidden]) .toggle__track { flex: 1; }
 }
 @media (max-width: 360px) {
   .controls__inner { gap: 0.4rem; padding-left: 0.6rem; padding-right: 0.6rem; }
