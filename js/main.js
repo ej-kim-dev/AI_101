@@ -6,6 +6,9 @@
    3. Drawings   — small line icons (inline SVG)
    4. Sections   — one function per part of the presentation
    5. Controls   — the two sliders
+
+   Moving between slides (contents, previous/next, present mode)
+   lives in js/present.js.
    ========================================================= */
 
 /* ---------- 1. State ----------
@@ -26,6 +29,16 @@ const pick = (value) =>
 // Make text safe to put inside HTML.
 const esc = (text) =>
   String(text).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Like esc, but ==key phrases== become highlighted <strong> text.
+const rich = (text) => esc(text).replace(/==(.+?)==/g, '<strong class="hl">$1</strong>');
+
+// The order of the slides. present.js uses the same list.
+const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "context", "takeaway", "more"];
+
+// Large, faint slide number ("01", "02", …) in the corner of each slide.
+const slideNum = (id) =>
+  `<span class="slide__num" aria-hidden="true">${String(SECTION_IDS.indexOf(id) + 1).padStart(2, "0")}</span>`;
 
 /* ---------- 3. Drawings ----------
    48×48 line icons. They use currentColor, so they follow the theme.
@@ -52,7 +65,8 @@ const icon = (name, cls = "icon") =>
 
 // Section wrapper: every part of the presentation is a card with a heading.
 const section = (id, eyebrow, title, inner, extraClass = "") => `
-  <section class="slide ${extraClass}" id="${id}" aria-labelledby="${id}-title">
+  <section class="slide ${extraClass}" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
+    ${slideNum(id)}
     <p class="eyebrow">${esc(eyebrow)}</p>
     ${title ? `<h2 class="slide__title" id="${id}-title">${esc(title)}</h2>` : ""}
     ${inner}
@@ -63,10 +77,11 @@ const section = (id, eyebrow, title, inner, extraClass = "") => `
 // 1. Opening
 function opening(c) {
   return `
-  <section class="slide slide--hero" id="opening" aria-labelledby="opening-title">
+  <section class="slide slide--hero" id="opening" aria-labelledby="opening-title" tabindex="-1">
+    ${slideNum("opening")}
     <p class="eyebrow">${esc(c.eyebrow)}</p>
     <h1 class="hero__title" id="opening-title">${esc(c.title)}</h1>
-    <p class="lead">${esc(c.body)}</p>
+    <p class="lead">${rich(c.body)}</p>
     <div class="metaphor">
       ${icon(c.icon, "icon icon--xl")}
       <div>
@@ -90,10 +105,10 @@ function concepts(c) {
         <span class="card__term">${esc(item.term)}<span class="sr-only">:</span></span>
         ${esc(pick(item.title))}
       </h3>
-      <p class="card__body">${esc(pick(item.body))}</p>
-      ${item.note ? `<p class="card__note">${esc(item.note)}</p>` : ""}
+      <p class="card__body">${rich(pick(item.body))}</p>
+      ${item.note ? `<p class="card__note">${rich(item.note)}</p>` : ""}
     </li>`).join("");
-  return section("concepts", c.eyebrow, c.title, `<ol class="cards">${cards}</ol>`);
+  return section("concepts", c.eyebrow, c.title, `<ol class="cards stagger">${cards}</ol>`);
 }
 
 // 3. Chat vs. project — a small diagram made of HTML (so the text translates)
@@ -114,14 +129,14 @@ function distinction(c) {
     <figure class="diagram">
       <div class="diagram__shared">
         <p class="diagram__heading">${esc(pick(c.sharedTitle))}</p>
-        <ul class="diagram__list">${shared}</ul>
+        <ul class="diagram__list stagger">${shared}</ul>
       </div>
       <p class="diagram__flow"><span class="diagram__arrow" aria-hidden="true"></span>${esc(c.flow)}</p>
       <div class="diagram__chats">
         <p class="diagram__heading">${esc(c.chatsTitle)}</p>
-        <ul class="diagram__list">${chats}</ul>
+        <ul class="diagram__list stagger">${chats}</ul>
       </div>
-      <figcaption class="diagram__caption">${esc(c.caption)}</figcaption>
+      <figcaption class="diagram__caption">${rich(c.caption)}</figcaption>
     </figure>
     <p class="note">${esc(c.note)}</p>`);
 }
@@ -136,8 +151,8 @@ function guide(c) {
       <p class="option__like"><span class="label">${esc(c.likeLabel)}</span>${esc(pick(o.like))}</p>
     </li>`).join("");
   return section("guide", c.eyebrow, c.title, `
-    <ul class="options">${options}</ul>
-    <p class="note note--plain">${esc(c.together)}</p>`);
+    <ul class="options stagger">${options}</ul>
+    <p class="note note--plain">${rich(c.together)}</p>`);
 }
 
 // One highlighted ingredient. The number badge is kept on the same line
@@ -176,7 +191,7 @@ function example(c) {
     </div>
 
     <h3 class="subhead">${esc(c.ingredientsTitle)}</h3>
-    <ol class="ingredients">${list}</ol>
+    <ol class="ingredients stagger">${list}</ol>
 
     <div class="sample">
       <div class="sample__text">
@@ -198,8 +213,8 @@ function example(c) {
 function context(c) {
   const checks = c.checks.map((x) => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join("");
   return section("context", c.eyebrow, c.title, `
-    <p class="lead lead--left">${esc(c.body)}</p>
-    <ul class="checks">${checks}</ul>
+    <p class="lead lead--left">${rich(c.body)}</p>
+    <ul class="checks stagger">${checks}</ul>
     <div class="metaphor metaphor--small">
       ${icon(c.icon, "icon icon--lg")}
       <p class="metaphor__text">${esc(pick(c.metaphor))}</p>
@@ -211,11 +226,12 @@ function takeaway(c) {
   const steps = c.steps.map((s, i) => `
     <li class="flow__step"><span class="flow__num" aria-hidden="true">${i + 1}</span><span class="flow__text">${esc(s)}</span>${i < c.steps.length - 1 ? '<span class="flow__arrow" aria-hidden="true">→</span>' : ""}</li>`).join("");
   return `
-  <section class="slide slide--takeaway" id="takeaway" aria-labelledby="takeaway-title">
+  <section class="slide slide--takeaway" id="takeaway" aria-labelledby="takeaway-title" tabindex="-1">
+    ${slideNum("takeaway")}
     <p class="eyebrow">${esc(c.eyebrow)}</p>
     <h2 class="sr-only" id="takeaway-title">${esc(c.eyebrow)}</h2>
-    <ol class="flow">${steps}</ol>
-    <p class="lead lead--left">${esc(c.body)}</p>
+    <ol class="flow stagger">${steps}</ol>
+    <p class="lead lead--left">${rich(c.body)}</p>
     <div class="examples">
       <div class="example-box"><p class="label">${esc(c.followLabel)}</p><p>${esc(c.follow)}</p></div>
       <div class="example-box"><p class="label">${esc(c.reviewLabel)}</p><p>${esc(c.review)}</p></div>
@@ -232,7 +248,7 @@ function more(c, wasOpen) {
       <span class="source__why">${esc(s.why)}</span>
     </li>`).join("");
   return `
-  <section class="slide slide--more" id="more" aria-label="${esc(c.summary)}">
+  <section class="slide slide--more" id="more" aria-label="${esc(c.summary)}" tabindex="-1">
     <details class="more" ${wasOpen ? "open" : ""}>
       <summary><span class="more__title">${esc(c.summary)}</span><span class="more__hint">${esc(c.hint)}</span><span class="more__chev" aria-hidden="true"></span></summary>
       <div class="more__body">
@@ -272,6 +288,7 @@ function render({ announce = false } = {}) {
     more(c.more, wasOpen);
 
   syncControls();
+  Presenter.afterRender();   // rebuild the contents list, motion and present mode (js/present.js)
   if (announce) document.getElementById("status").textContent = c.ui.status[state.view];
 }
 

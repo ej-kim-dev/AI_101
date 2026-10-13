@@ -7,6 +7,8 @@
      changes with the Comparison slider. Any other value is
      shared by both versions.
    - `icon` names refer to the drawings in js/main.js.
+   - Text wrapped in ==double equals== is shown as a highlighted
+     key phrase (a marker stroke that draws in when the slide appears).
    ========================================================= */
 
 const CONTENT = {
@@ -25,12 +27,25 @@ const CONTENT = {
         school: "Now showing the school version, in English.",
         company: "Now showing the company version, in English.",
       },
+      nav: {
+        label: "Slide navigation",
+        contents: "Contents",
+        prev: "Previous section",
+        next: "Next section",
+        present: "Present",
+        exit: "Exit",
+        announce: "Section {n} of {total}: {name}",
+        presentOn: "Presentation mode on. Use the left and right arrow keys to move. Press Escape to exit.",
+        presentOff: "Presentation mode off.",
+        hint: "← → to move · Esc to exit",
+        sections: ["Start here", "The main ideas", "Shared vs. current", "What should I use?", "Practical example", "Choose useful context", "Main takeaway", "Learn more"],
+      },
     },
 
     opening: {
       eyebrow: "Start here",
       title: "Give AI a clear assignment and useful context.",
-      body: "AI already has general knowledge, but it needs background about your particular task. Context is the information that helps it understand what you want.",
+      body: "AI already has ==general knowledge==, but it needs ==background about your particular task==. Context is the information that helps it understand what you want.",
       icon: { school: "teacher", company: "employee" },
       metaphor: {
         school: "Think of working with AI as working with a teacher.",
@@ -67,8 +82,8 @@ const CONTENT = {
           icon: { school: "books", company: "documents" },
           title: { school: "Reference books", company: "Reference documents" },
           body: {
-            school: "The teacher can consult the books you provide. Having access does not mean every book has been read.",
-            company: "The employee can consult the documents you provide. Having access does not mean every document has been read.",
+            school: "The teacher can consult the books you provide. Having access ==does not mean every book has been read==.",
+            company: "The employee can consult the documents you provide. Having access ==does not mean every document has been read==.",
           },
         },
         {
@@ -76,8 +91,8 @@ const CONTENT = {
           icon: { school: "bookshelf", company: "cabinet" },
           title: { school: "A collection of books", company: "A filing cabinet" },
           body: {
-            school: "Giving access to a folder lets the teacher consult its available materials. It does not automatically add everything to project knowledge.",
-            company: "Giving access to a folder lets the employee consult its available documents. It does not automatically add everything to project knowledge.",
+            school: "Giving access to a folder lets the teacher consult its available materials. It ==does not automatically add everything== to project knowledge.",
+            company: "Giving access to a folder lets the employee consult its available documents. It ==does not automatically add everything== to project knowledge.",
           },
         },
         {
@@ -97,7 +112,7 @@ const CONTENT = {
             school: "Connecting a service is like adding an app the teacher can use, such as Google Drive.",
             company: "Connecting a service is like adding a work app the employee can use, such as Google Drive.",
           },
-          note: "What AI can read, create, or edit depends on the connector and the permissions you grant.",
+          note: "What AI can read, create, or edit depends on the connector and ==the permissions you grant==.",
         },
         {
           term: "Working outside a project",
@@ -114,7 +129,7 @@ const CONTENT = {
     distinction: {
       eyebrow: "Shared vs. current",
       title: "Project materials are shared. The chat is about now.",
-      caption: "Project materials are shared references. The chat is the discussion about the current assignment.",
+      caption: "Project materials are ==shared references==. The chat is the discussion about ==the current assignment==.",
       sharedTitle: { school: "Classroom (project)", company: "Team workspace (project)" },
       sharedItems: {
         school: [
@@ -168,7 +183,7 @@ const CONTENT = {
           like: { school: "An app the teacher can use", company: "A work app the employee can use" },
         },
       ],
-      together: "These can work together: a chat inside a project can also use a connector.",
+      together: "These can work together: a chat inside a project ==can also use a connector==.",
     },
 
     example: {
@@ -213,7 +228,7 @@ const CONTENT = {
     context: {
       eyebrow: "Choose useful context",
       title: "Bring the right materials—not every material.",
-      body: "Choose relevant, current sources. Tell AI which source matters most, and point out outdated information or conflicting documents.",
+      body: "Choose ==relevant, current sources==. Tell AI ==which source matters most==, and point out outdated information or conflicting documents.",
       icon: { school: "bookshelf", company: "cabinet" },
       metaphor: {
         school: "A classroom full of unrelated books does not make the assignment clearer.",
@@ -225,7 +240,7 @@ const CONTENT = {
     takeaway: {
       eyebrow: "Main takeaway",
       steps: ["Clear assignment", "Useful materials", "Feedback", "Review"],
-      body: "You don’t need a perfect first request. Start with your goal, add useful background and an example, then refine the result together. Check the final work because AI can make mistakes.",
+      body: "You don’t need a perfect first request. Start with your goal, add useful background and an example, then refine the result together. ==Check the final work== because AI can make mistakes.",
       followLabel: "Feedback example",
       follow: "“Make this shorter and explain the difficult words.”",
       reviewLabel: "Review example",
@@ -276,12 +291,25 @@ const CONTENT = {
         school: "학교 버전을 한국어로 보고 있습니다.",
         company: "회사 버전을 한국어로 보고 있습니다.",
       },
+      nav: {
+        label: "슬라이드 이동",
+        contents: "목차",
+        prev: "이전 섹션",
+        next: "다음 섹션",
+        present: "발표 모드",
+        exit: "발표 종료",
+        announce: "{total}개 중 {n}번째 섹션: {name}",
+        presentOn: "발표 모드를 시작했습니다. 왼쪽, 오른쪽 화살표 키로 이동하고, Esc 키를 누르면 끝납니다.",
+        presentOff: "발표 모드를 마쳤습니다.",
+        hint: "← → 키로 이동 · Esc로 종료",
+        sections: ["시작하기", "핵심 개념", "공유 자료와 대화", "무엇을 쓸까요?", "실전 예시", "알맞은 맥락 고르기", "핵심 정리", "더 알아보기"],
+      },
     },
 
     opening: {
       eyebrow: "시작하기",
       title: "AI에게 분명한 과제와 도움이 되는 맥락을 알려 주세요.",
-      body: "AI는 이미 폭넓은 일반 지식을 갖고 있지만, 지금 하려는 일에 대한 배경은 따로 알려 줘야 합니다. 원하는 것을 이해하도록 돕는 이런 정보를 ‘맥락’이라고 합니다.",
+      body: "AI는 이미 ==폭넓은 일반 지식==을 갖고 있지만, ==지금 하려는 일에 대한 배경==은 따로 알려 줘야 합니다. 원하는 것을 이해하도록 돕는 이런 정보를 ‘맥락’이라고 합니다.",
       icon: { school: "teacher", company: "employee" },
       metaphor: {
         school: "AI와 함께하는 작업을 선생님과 함께하는 공부처럼 생각해 보세요.",
@@ -318,8 +346,8 @@ const CONTENT = {
           icon: { school: "books", company: "documents" },
           title: { school: "참고 도서", company: "참고 문서" },
           body: {
-            school: "선생님은 여러분이 건넨 책을 찾아볼 수 있습니다. 하지만 책이 있다고 해서 모든 책을 다 읽었다는 뜻은 아닙니다.",
-            company: "직원은 여러분이 건넨 문서를 찾아볼 수 있습니다. 하지만 문서가 있다고 해서 모든 문서를 다 읽었다는 뜻은 아닙니다.",
+            school: "선생님은 여러분이 건넨 책을 찾아볼 수 있습니다. 하지만 책이 있다고 해서 ==모든 책을 다 읽었다는 뜻은 아닙니다==.",
+            company: "직원은 여러분이 건넨 문서를 찾아볼 수 있습니다. 하지만 문서가 있다고 해서 ==모든 문서를 다 읽었다는 뜻은 아닙니다==.",
           },
         },
         {
@@ -327,8 +355,8 @@ const CONTENT = {
           icon: { school: "bookshelf", company: "cabinet" },
           title: { school: "책 모음", company: "서류함" },
           body: {
-            school: "폴더 접근 권한을 주면 선생님이 그 안의 자료를 찾아볼 수 있습니다. 그렇다고 모든 내용이 프로젝트 지식에 자동으로 추가되지는 않습니다.",
-            company: "폴더 접근 권한을 주면 직원이 그 안의 문서를 찾아볼 수 있습니다. 그렇다고 모든 내용이 프로젝트 지식에 자동으로 추가되지는 않습니다.",
+            school: "폴더 접근 권한을 주면 선생님이 그 안의 자료를 찾아볼 수 있습니다. 그렇다고 ==모든 내용이 프로젝트 지식에 자동으로 추가되지는 않습니다==.",
+            company: "폴더 접근 권한을 주면 직원이 그 안의 문서를 찾아볼 수 있습니다. 그렇다고 ==모든 내용이 프로젝트 지식에 자동으로 추가되지는 않습니다==.",
           },
         },
         {
@@ -348,7 +376,7 @@ const CONTENT = {
             school: "서비스를 연결하는 것은 Google Drive처럼 선생님이 쓸 수 있는 앱을 하나 더해 주는 것과 같습니다.",
             company: "서비스를 연결하는 것은 Google Drive처럼 직원이 쓸 수 있는 업무용 앱을 하나 더해 주는 것과 같습니다.",
           },
-          note: "AI가 무엇을 읽고, 만들고, 수정할 수 있는지는 커넥터와 여러분이 허용한 권한에 따라 달라집니다.",
+          note: "AI가 무엇을 읽고, 만들고, 수정할 수 있는지는 커넥터와 ==여러분이 허용한 권한==에 따라 달라집니다.",
         },
         {
           term: "프로젝트 밖에서 작업하기",
@@ -365,7 +393,7 @@ const CONTENT = {
     distinction: {
       eyebrow: "공유 자료와 지금의 대화",
       title: "프로젝트 자료는 함께 쓰고, 채팅은 지금의 일을 다룹니다.",
-      caption: "프로젝트 자료는 함께 쓰는 참고 자료이고, 채팅은 지금 하고 있는 과제에 대한 대화입니다.",
+      caption: "프로젝트 자료는 ==함께 쓰는 참고 자료==이고, 채팅은 ==지금 하고 있는 과제에 대한 대화==입니다.",
       sharedTitle: { school: "교실 (프로젝트)", company: "팀 업무 공간 (프로젝트)" },
       sharedItems: {
         school: [
@@ -419,7 +447,7 @@ const CONTENT = {
           like: { school: "선생님이 쓸 수 있는 앱", company: "직원이 쓸 수 있는 업무용 앱" },
         },
       ],
-      together: "세 가지는 함께 쓸 수 있습니다. 프로젝트 안의 채팅에서도 커넥터를 사용할 수 있어요.",
+      together: "세 가지는 함께 쓸 수 있습니다. 프로젝트 안의 채팅에서도 ==커넥터를 사용할 수 있어요==.",
     },
 
     example: {
@@ -463,7 +491,7 @@ const CONTENT = {
     context: {
       eyebrow: "알맞은 맥락 고르기",
       title: "모든 자료가 아니라, 알맞은 자료를 가져오세요.",
-      body: "관련 있고 최신인 자료를 고르세요. 어떤 자료가 가장 중요한지 알려 주고, 오래된 정보나 서로 맞지 않는 문서가 있다면 짚어 주세요.",
+      body: "==관련 있고 최신인 자료==를 고르세요. ==어떤 자료가 가장 중요한지== 알려 주고, 오래된 정보나 서로 맞지 않는 문서가 있다면 짚어 주세요.",
       icon: { school: "bookshelf", company: "cabinet" },
       metaphor: {
         school: "관계없는 책으로 가득한 교실이 과제를 더 분명하게 만들어 주지는 않습니다.",
@@ -475,7 +503,7 @@ const CONTENT = {
     takeaway: {
       eyebrow: "핵심 정리",
       steps: ["분명한 과제", "도움이 되는 자료", "피드백", "검토"],
-      body: "처음부터 완벽하게 요청할 필요는 없습니다. 목표부터 말하고, 도움이 되는 배경과 예시를 더한 뒤, 함께 결과를 다듬어 가세요. AI도 실수할 수 있으니 최종 결과물은 꼭 확인하세요.",
+      body: "처음부터 완벽하게 요청할 필요는 없습니다. 목표부터 말하고, 도움이 되는 배경과 예시를 더한 뒤, 함께 결과를 다듬어 가세요. AI도 실수할 수 있으니 ==최종 결과물은 꼭 확인하세요==.",
       followLabel: "피드백 예시",
       follow: "“좀 더 짧게 줄이고, 어려운 단어는 풀어서 설명해 줘.”",
       reviewLabel: "검토 예시",
