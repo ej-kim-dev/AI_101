@@ -32,22 +32,18 @@ At the top of the page there are two switches with two positions each:
 - Each switch is a pair of radio buttons, so screen readers announce the label and which option is selected.
 - To open a specific version, add it to the link, for example `index.html?view=company&lang=ko`.
 
-## Moving through the presentation
+## Navigating the page
 
-| Control | What it does |
-| --- | --- |
-| **‹ ›** buttons in the bottom dock | Previous / next section |
-| **3 / 8 · section name** in the dock | Opens the numbered contents list |
-| Numbered dots on the left (wide screens) | Jump to any section; hover to see its name |
-| **Present** | One section at a time, full screen when the browser allows |
-| **← →** keys | Previous / next section (also **PageUp / PageDown**, so presentation clickers work) |
-| **Home / End** (present mode) | First / last section |
-| **Esc** | Leave present mode |
-| Swipe left / right (phones, present mode) | Previous / next section |
+The page is one continuous scroll, with each section filling one screen. It was checked at 1280×800, 1366×768, 1440×900, 1536×864 and 1920×1080.
 
-The thin bar under the sliders shows how far through you are. Links can point to a section, for example `index.html?lang=ko#example`.
+- **Section menu** under the sliders: click a section to glide down to it. An underline slides to the section you're reading. On phones, this is a single button that opens the list.
+- **Progress bar**: the thin line under the menu fills up as you go down the page.
+- **Scroll animations**: each section rises in as it scrolls into view, and cards and steps appear one after another. Key phrases get a marker highlight. In browsers that support scroll-linked animation, the opening also shrinks and fades as you scroll past it, and the big section numbers drift slower than the page.
+- **Phones**: the header slides away while you scroll down and comes back when you scroll up.
+- **Links to a section**: for example `index.html?lang=ko#example`.
+- **Reduced motion**: if the viewer's device asks for reduced motion, everything simply appears without movement.
 
-Key phrases are written as `==like this==` in `js/content.js`. They appear bold with a marker highlight that draws in when the section comes into view. If the viewer's device asks for reduced motion, the page skips the movement and simply shows everything.
+Key phrases are written as `==like this==` in `js/content.js`.
 
 ## Files
 
@@ -56,7 +52,7 @@ Key phrases are written as `==like this==` in `js/content.js`. They appear bold 
 | `index.html` | The page shell and the two switches |
 | `js/content.js` | **All the words**, in English and Korean. Edit the text here. |
 | `js/main.js` | Builds the slides from the content, draws the icons and runs the switches |
-| `js/present.js` | Contents list, previous/next, present mode, keyboard and swipe, motion |
+| `js/nav.js` | Section menu, scroll tracking and scroll animations |
 | `css/styles.css` | Colours for each theme (school and company, light and dark), layout and accessibility rules |
 
 In `js/content.js`, a value written as `{ school: "...", company: "..." }` changes with the Comparison switch. Any other value is the same in both versions.

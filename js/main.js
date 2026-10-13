@@ -7,8 +7,8 @@
    4. Sections   — one function per part of the presentation
    5. Controls   — the two sliders
 
-   Moving between slides (contents, previous/next, present mode)
-   lives in js/present.js.
+   The section menu, scroll tracking and scroll animations
+   live in js/nav.js.
    ========================================================= */
 
 /* ---------- 1. State ----------
@@ -33,7 +33,7 @@ const esc = (text) =>
 // Like esc, but ==key phrases== become highlighted <strong> text.
 const rich = (text) => esc(text).replace(/==(.+?)==/g, '<strong class="hl">$1</strong>');
 
-// The order of the slides. present.js uses the same list.
+// The order of the sections. nav.js uses the same list.
 const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "context", "takeaway", "more"];
 
 // Large, faint slide number ("01", "02", …) in the corner of each slide.
@@ -178,34 +178,39 @@ function example(c) {
 
   const bullets = c.slideBullets.map((b) => `<li>${esc(b)}</li>`).join("");
 
+  // Two columns on large screens, so the whole example fits on one screen.
   return section("example", c.eyebrow, c.title, `
-    <div class="compare">
-      <div class="request request--vague">
-        <p class="request__label"><span class="request__mark" aria-hidden="true">✕</span>${esc(c.vagueLabel)}</p>
-        <p class="request__text">“${esc(c.vague)}”</p>
-      </div>
-      <div class="request request--clear">
-        <p class="request__label"><span class="request__mark" aria-hidden="true">✓</span>${esc(c.clearLabel)}</p>
-        <p class="request__text">${clear}</p>
-      </div>
-    </div>
-
-    <h3 class="subhead">${esc(c.ingredientsTitle)}</h3>
-    <ol class="ingredients stagger">${list}</ol>
-
-    <div class="sample">
-      <div class="sample__text">
-        <p class="sample__metaphor">${esc(pick(c.sampleMetaphor))}</p>
-        <p class="sample__why">${esc(c.sampleWhy)}</p>
-      </div>
-      <figure class="slidemock" aria-label="${esc(c.slideLabel)}">
-        <span class="slidemock__tag">${esc(c.slideTag)}</span>
-        <div class="slidemock__page">
-          <p class="slidemock__title">${esc(c.slideTitle)}</p>
-          <ul class="slidemock__bullets">${bullets}</ul>
+    <div class="example-grid">
+      <div class="compare">
+        <div class="request request--vague">
+          <p class="request__label"><span class="request__mark" aria-hidden="true">✕</span>${esc(c.vagueLabel)}</p>
+          <p class="request__text">“${esc(c.vague)}”</p>
         </div>
-        <figcaption class="slidemock__caption">${esc(c.slideCaption)}</figcaption>
-      </figure>
+        <div class="request request--clear">
+          <p class="request__label"><span class="request__mark" aria-hidden="true">✓</span>${esc(c.clearLabel)}</p>
+          <p class="request__text">${clear}</p>
+        </div>
+      </div>
+
+      <div class="example-side">
+        <h3 class="subhead">${esc(c.ingredientsTitle)}</h3>
+        <ol class="ingredients stagger">${list}</ol>
+
+        <div class="sample">
+          <div class="sample__text">
+            <p class="sample__metaphor">${esc(pick(c.sampleMetaphor))}</p>
+            <p class="sample__why">${esc(c.sampleWhy)}</p>
+          </div>
+          <figure class="slidemock" aria-label="${esc(c.slideLabel)}">
+            <span class="slidemock__tag">${esc(c.slideTag)}</span>
+            <div class="slidemock__page">
+              <p class="slidemock__title">${esc(c.slideTitle)}</p>
+              <ul class="slidemock__bullets">${bullets}</ul>
+            </div>
+            <figcaption class="slidemock__caption">${esc(c.slideCaption)}</figcaption>
+          </figure>
+        </div>
+      </div>
     </div>`);
 }
 
@@ -288,7 +293,7 @@ function render({ announce = false } = {}) {
     more(c.more, wasOpen);
 
   syncControls();
-  Presenter.afterRender();   // rebuild the contents list, motion and present mode (js/present.js)
+  Nav.afterRender();   // rebuild the section menu and scroll animations (js/nav.js)
   if (announce) document.getElementById("status").textContent = c.ui.status[state.view];
 }
 
