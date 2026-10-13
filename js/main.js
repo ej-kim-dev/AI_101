@@ -45,37 +45,19 @@ const rich = (text) => esc(text).replace(/==(.+?)==/g, '<strong class="hl">$1</s
 // The order of the sections. nav.js uses the same list.
 const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "context", "takeaway", "more"];
 
-// Large, faint slide number ("01", "02", …) in the corner of each slide.
-const slideNum = (id) =>
-  `<span class="slide__num" aria-hidden="true">${String(SECTION_IDS.indexOf(id) + 1).padStart(2, "0")}</span>`;
 
-/* ---------- 3. Drawings ----------
-   48×48 line icons. They use currentColor, so they follow the theme.
+/* ---------- 3. Icons ----------
+   The drawings come from js/icons.js (the Lucide icon set).
    They are decorative (aria-hidden): the text beside them says the same thing. */
-const ICONS = {
-  teacher: '<circle cx="17" cy="15" r="6"/><path d="M6 42v-6a11 11 0 0 1 22 0v6"/><rect x="30" y="7" width="14" height="11" rx="1.5"/><path d="M26 27l7-9"/>',
-  employee: '<circle cx="24" cy="13" r="6.5"/><path d="M11 43v-7a13 13 0 0 1 26 0v7"/><path d="M24 25l-2.5 4 2.5 9 2.5-9z"/>',
-  chat: '<path d="M8 8h21a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H17l-6 5v-5H8a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3z"/><path d="M36 17h4a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2v5l-6-5h-9a3 3 0 0 1-3-3v-1"/>',
-  classroom: '<rect x="8" y="6" width="32" height="19" rx="2"/><path d="M14 12h12M14 18h8"/><path d="M8 33h12M28 33h12M11 33v8M17 33v8M31 33v8M37 33v8"/>',
-  workspace: '<path d="M4 34h40M9 34v8M39 34v8"/><rect x="7" y="17" width="15" height="11" rx="1.5"/><rect x="26" y="17" width="15" height="11" rx="1.5"/><path d="M14.5 28v6M33.5 28v6"/>',
-  books: '<rect x="7" y="9" width="8" height="31" rx="1"/><rect x="17" y="13" width="8" height="27" rx="1"/><path d="M28 14l7-2 7 26-7 2z"/><path d="M7 15h8M17 19h8"/>',
-  documents: '<path d="M14 6h14l8 8v24a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M28 6v8h8"/><path d="M17 22h14M17 27h14M17 32h9"/><path d="M8 12v28a4 4 0 0 0 4 4h20"/>',
-  bookshelf: '<rect x="6" y="5" width="36" height="38" rx="2"/><path d="M6 24h36"/><path d="M11 9v15M15.5 11v13M20 9v15M26 12l4.5 12"/><path d="M11 28v15M16 30v13M21 28v15M33 30v13"/>',
-  cabinet: '<rect x="10" y="4" width="28" height="40" rx="2"/><path d="M10 17.5h28M10 30.5h28"/><path d="M21 11h6M21 24h6M21 37h6"/>',
-  board: '<rect x="5" y="6" width="38" height="27" rx="2"/><path d="M11 13l2 2 3-3M19 14h17M11 20l2 2 3-3M19 21h13M11 27l2 2 3-3M19 28h9"/><path d="M15 33l-4 9M33 33l4 9"/>',
-  guidelines: '<rect x="10" y="8" width="28" height="35" rx="2"/><rect x="18" y="4" width="12" height="7" rx="1.5"/><path d="M15 20l2 2 4-4M25 20h8M15 29l2 2 4-4M25 29h8M15 37h18"/>',
-  apps: '<rect x="6" y="6" width="16" height="16" rx="4"/><rect x="26" y="6" width="16" height="16" rx="4"/><rect x="6" y="26" width="16" height="16" rx="4"/><path d="M31 26v5M37 26v5M28 31h12v2a6 6 0 0 1-12 0z M34 39v5"/>',
-  outside: '<path d="M5 43V7h17v36"/><path d="M18 26h.01"/><circle cx="34" cy="12" r="4"/><path d="M34 16v12l-5 13M34 28l5 13M28 22h12"/>',
-  briefcase: '<rect x="6" y="15" width="36" height="26" rx="3"/><path d="M18 15v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M6 26h36M22 26v4h4v-4"/>',
-};
-
 const icon = (name, cls = "icon") =>
-  `<svg class="${cls}" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[pick(name)] || ""}</svg>`;
+  `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[pick(name)] || ""}</svg>`;
+
+// Icons for the row of sections in the opening (same order as SECTION_IDS).
+const SECTION_ICONS = ["s-start", "s-ideas", "s-compare", "s-choose", "s-example", "s-context", "s-takeaway", "s-more"];
 
 // Section wrapper: every part of the presentation is a card with a heading.
 const section = (id, eyebrow, title, inner, extraClass = "") => `
   <section class="slide ${extraClass}" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
-    ${slideNum(id)}
     <p class="eyebrow">${esc(eyebrow)}</p>
     ${title ? `<h2 class="slide__title" id="${id}-title">${esc(title)}</h2>` : ""}
     ${inner}
@@ -83,22 +65,28 @@ const section = (id, eyebrow, title, inner, extraClass = "") => `
 
 /* ---------- 4. Sections ---------- */
 
-// 1. Opening
-function opening(c) {
+// 1. Opening — big title, a row of section icons (like apple.com), then the idea
+function opening(c, nav) {
+  const chapters = nav.sections.map((name, i) => `
+    <li><a href="#${SECTION_IDS[i]}" data-index="${i}">${icon(SECTION_ICONS[i], "chapters__icon")}<span>${esc(name)}</span></a></li>`).join("");
   return `
   <section class="slide slide--hero" id="opening" aria-labelledby="opening-title" tabindex="-1">
-    ${slideNum("opening")}
     <p class="eyebrow">${esc(c.eyebrow)}</p>
     <h1 class="hero__title" id="opening-title">${esc(c.title)}</h1>
-    <p class="lead">${rich(c.body)}</p>
-    <div class="metaphor">
-      ${icon(c.icon, "icon icon--xl")}
+    <nav class="chapters" aria-label="${esc(nav.jump)}"><ol class="stagger">${chapters}</ol></nav>
+    <div class="hero__body">
       <div>
-        <p class="metaphor__text">${esc(pick(c.metaphor))}</p>
-        <p class="metaphor__note">${esc(c.metaphorNote)}</p>
+        <p class="lead">${rich(c.body)}</p>
+        <p class="tool-note">${esc(c.toolNote)}</p>
+      </div>
+      <div class="metaphor">
+        ${icon(c.icon, "icon icon--xl")}
+        <div>
+          <p class="metaphor__text">${esc(pick(c.metaphor))}</p>
+          <p class="metaphor__note">${esc(c.metaphorNote)}</p>
+        </div>
       </div>
     </div>
-    <p class="tool-note">${esc(c.toolNote)}</p>
   </section>`;
 }
 
@@ -241,7 +229,6 @@ function takeaway(c) {
     <li class="flow__step"><span class="flow__num" aria-hidden="true">${i + 1}</span><span class="flow__text">${esc(s)}</span>${i < c.steps.length - 1 ? '<span class="flow__arrow" aria-hidden="true">→</span>' : ""}</li>`).join("");
   return `
   <section class="slide slide--takeaway" id="takeaway" aria-labelledby="takeaway-title" tabindex="-1">
-    ${slideNum("takeaway")}
     <p class="eyebrow">${esc(c.eyebrow)}</p>
     <h2 class="sr-only" id="takeaway-title">${esc(c.eyebrow)}</h2>
     <ol class="flow stagger">${steps}</ol>
@@ -292,7 +279,7 @@ function render({ announce = false } = {}) {
   const wasOpen = app.querySelector("details.more")?.open ?? false;
 
   app.innerHTML =
-    opening(c.opening) +
+    opening(c.opening, c.ui.nav) +
     concepts(c.concepts) +
     distinction(c.distinction) +
     guide(c.guide) +

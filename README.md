@@ -26,33 +26,34 @@ const SHOW_COMPANY = false;
 
 to `true`.
 
-## The two sliders
+## The switches
 
-At the top of the page there are two switches with two positions each:
-
-| Slider | Left | Right | Default |
-| --- | --- | --- | --- |
-| Comparison | School (AI as a teacher) | Company (AI as an employee) | School |
-| Language | English | 한국어 | English |
+The **language switch** (English ↔ 한국어) sits at the top right. The School ↔ Company switch sits next to it when it's turned on (see above).
 
 - Each switch changes only its own setting. The other one stays as it is.
 - Content stays in the same order in every version, so it's easy to compare them.
-- The page language (`<html lang>`), title and colour theme update with the switches.
+- The page language (`<html lang>`) and title update with the switch.
+- The switches have no visible label, since the options speak for themselves. Screen readers still announce "Language" and "Comparison".
 - Keyboard: press **Tab** to reach a switch, then use the **arrow keys** to change it.
-- Each switch is a pair of radio buttons, so screen readers announce the label and which option is selected.
-- To open a specific version, add it to the link, for example `index.html?lang=ko` (or `?view=company&lang=ko` when the Company version is on).
+- To open a specific version, add it to the link, for example `index.html?lang=ko`.
+
+## Design
+
+The look follows apple.com: black, white and greys, big left-aligned headings, full-width bands that alternate white and light grey, borderless rounded cards, and a black band for the main takeaway. Dark mode is supported. The opening has a row of icons with labels, like apple.com's product pages, for jumping to any section.
+
+Icons come from [Lucide](https://lucide.dev), an open-source icon set (ISC license). Apple's own SF Symbols can't be used on other websites. The icons are copied into `js/icons.js`, so the site has no outside dependencies.
 
 ## Navigating the page
 
 The page is one continuous scroll, with each section filling one screen. It was checked at 1280×800, 1366×768, 1440×900, 1536×864 and 1920×1080.
 
-- **Section menu** under the sliders: click a section to glide down to it. An underline slides to the section you're reading. On phones, this is a single button that opens the list.
-- **Scroll animations**: each section rises in as it scrolls into view, and cards and steps appear one after another. Key phrases get a marker highlight. In browsers that support scroll-linked animation, the opening also shrinks and fades as you scroll past it, and the big section numbers drift slower than the page.
+- **Section menu** in the top bar: click a section to glide down to it. An underline slides to the section you're reading. On phones, this is a single button that opens the list.
+- **Scroll animations**: each section rises in as it scrolls into view, and cards and steps appear one after another. Key phrases turn from grey to black. In browsers that support scroll-linked animation, the opening also shrinks and fades as you scroll past it, .
 - **Phones**: the header slides away while you scroll down and comes back when you scroll up.
 - **Links to a section**: for example `index.html?lang=ko#example`.
 - **Reduced motion**: if the viewer's device asks for reduced motion, everything simply appears without movement.
 
-Key phrases are written as `==like this==` in `js/content.js`.
+Key phrases are written as `==like this==` in `js/content.js`. They appear bold and darken as the section comes into view.
 
 ## Files
 
@@ -60,9 +61,10 @@ Key phrases are written as `==like this==` in `js/content.js`.
 | --- | --- |
 | `index.html` | The page shell and the two switches |
 | `js/content.js` | **All the words**, in English and Korean. Edit the text here. |
-| `js/main.js` | Builds the slides from the content, draws the icons and runs the switches |
+| `js/main.js` | Builds the sections from the content and runs the switches |
+| `js/icons.js` | The icons (Lucide) |
 | `js/nav.js` | Section menu, scroll tracking and scroll animations |
-| `css/styles.css` | Colours for each theme (school and company, light and dark), layout and accessibility rules |
+| `css/styles.css` | Colours (light and dark), layout, motion and accessibility rules |
 
 In `js/content.js`, a value written as `{ school: "...", company: "..." }` changes with the Comparison switch. Any other value is the same in both versions.
 

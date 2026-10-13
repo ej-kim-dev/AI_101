@@ -93,7 +93,8 @@ const Nav = (() => {
   }
 
   document.addEventListener("click", (e) => {
-    const link = e.target.closest("#sectionnav a[data-index]");
+    // Section menu, the icon row in the opening, and the "AI 101" name all use data-index.
+    const link = e.target.closest("a[data-index]");
     if (!link) return;
     e.preventDefault();
     closeMenu(false);

@@ -10,62 +10,71 @@
   <!-- Relative paths keep this working under a GitHub Pages subpath (/repo-name/) -->
   <link rel="stylesheet" href="css/styles.css" />
   <script src="js/content.js" defer></script>
+  <script src="js/icons.js" defer></script>
   <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#app" data-t="skip">Skip to presentation</a>
 
-  <!-- Controls: two two-position sliders. Each is a radio group, so it works
+  <!-- Header: name, section menu and the switches. Each switch is a
+       two-position slider. Each is a radio group, so it works
        with Tab + arrow keys and screen readers announce "1 of 2, selected". -->
   <header class="controls" aria-labelledby="controls-title">
     <h2 id="controls-title" class="sr-only" data-t="controlsTitle">Presentation settings</h2>
-    <div class="controls__inner">
 
-      <fieldset class="toggle">
-        <legend class="toggle__legend" data-t="viewLegend">Comparison</legend>
-        <div class="toggle__track" data-pos="0">
-          <input type="radio" id="view-school" name="view" value="school" checked />
-          <label for="view-school"><span class="toggle__check" aria-hidden="true">✓</span><span data-t="viewSchool">School</span></label>
-          <input type="radio" id="view-company" name="view" value="company" />
-          <label for="view-company"><span class="toggle__check" aria-hidden="true">✓</span><span data-t="viewCompany">Company</span></label>
-          <span class="toggle__thumb" aria-hidden="true"></span>
+    <div class="bar">
+      <a class="brand" href="#opening" data-index="0">AI 101</a>
+
+      <!-- Section menu (filled in by js/nav.js): a row of links on larger
+           screens, a dropdown on phones. The underline slides to the section
+           you're reading. -->
+      <nav class="sectionnav" id="sectionnav" aria-label="Sections">
+        <div class="sectionnav__track">
+          <ol class="sectionnav__list"></ol>
+          <span class="sectionnav__indicator" aria-hidden="true"></span>
         </div>
-      </fieldset>
-
-      <fieldset class="toggle">
-        <legend class="toggle__legend" data-t="langLegend">Language</legend>
-        <div class="toggle__track" data-pos="0">
-          <input type="radio" id="lang-en" name="lang" value="en" checked />
-          <label for="lang-en" lang="en"><span class="toggle__check" aria-hidden="true">✓</span>English</label>
-          <input type="radio" id="lang-ko" name="lang" value="ko" />
-          <label for="lang-ko" lang="ko"><span class="toggle__check" aria-hidden="true">✓</span>한국어</label>
-          <span class="toggle__thumb" aria-hidden="true"></span>
+        <div class="sectionnav__compact">
+          <button class="sectionnav__button" type="button" aria-expanded="false" aria-controls="section-menu">
+            <span class="sr-only"><span data-n="contents">Go to section</span>:</span>
+            <span class="sectionnav__count">01</span>
+            <span class="sectionnav__name">Start here</span>
+            <svg class="sectionnav__chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="section-menu" id="section-menu" hidden>
+            <ol></ol>
+          </div>
         </div>
-      </fieldset>
+      </nav>
 
+      <!-- Settings on the right. The labels ("Comparison", "Language") are
+           read by screen readers but not shown: the options speak for themselves. -->
+      <div class="controls__inner">
+
+        <fieldset class="toggle">
+          <legend class="toggle__legend sr-only" data-t="viewLegend">Comparison</legend>
+          <div class="toggle__track" data-pos="0">
+            <input type="radio" id="view-school" name="view" value="school" checked />
+            <label for="view-school"><span data-t="viewSchool">School</span></label>
+            <input type="radio" id="view-company" name="view" value="company" />
+            <label for="view-company"><span data-t="viewCompany">Company</span></label>
+            <span class="toggle__thumb" aria-hidden="true"></span>
+          </div>
+        </fieldset>
+
+        <fieldset class="toggle">
+          <legend class="toggle__legend sr-only" data-t="langLegend">Language</legend>
+          <div class="toggle__track" data-pos="0">
+            <input type="radio" id="lang-en" name="lang" value="en" checked />
+            <label for="lang-en" lang="en">English</label>
+            <input type="radio" id="lang-ko" name="lang" value="ko" />
+            <label for="lang-ko" lang="ko">한국어</label>
+            <span class="toggle__thumb" aria-hidden="true"></span>
+          </div>
+        </fieldset>
+
+      </div>
     </div>
-
-    <!-- Section menu (filled in by js/nav.js): a row of links on larger
-         screens, a dropdown on phones. The underline slides to the section
-         you're reading. -->
-    <nav class="sectionnav" id="sectionnav" aria-label="Sections">
-      <div class="sectionnav__track">
-        <ol class="sectionnav__list"></ol>
-        <span class="sectionnav__indicator" aria-hidden="true"></span>
-      </div>
-      <div class="sectionnav__compact">
-        <button class="sectionnav__button" type="button" aria-expanded="false" aria-controls="section-menu">
-          <span class="sr-only"><span data-n="contents">Go to section</span>:</span>
-          <span class="sectionnav__count">01</span>
-          <span class="sectionnav__name">Start here</span>
-          <svg class="sectionnav__chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="section-menu" id="section-menu" hidden>
-          <ol></ol>
-        </div>
-      </div>
-    </nav>
 
   </header>
 

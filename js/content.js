@@ -30,6 +30,7 @@ const CONTENT = {
       // Short names for the section menu at the top
       nav: {
         label: "Sections",
+        jump: "Jump to a section",
         contents: "Go to section",
         announce: "Section {n} of {total}: {name}",
         sections: ["Start", "Main ideas", "Chat vs. project", "What to use", "Example", "Context", "Takeaway", "Learn more"],
@@ -288,6 +289,7 @@ const CONTENT = {
       // 상단 섹션 메뉴에 쓰는 짧은 이름
       nav: {
         label: "섹션",
+        jump: "섹션으로 바로 가기",
         contents: "섹션 바로가기",
         announce: "{total}개 중 {n}번째 섹션: {name}",
         sections: ["시작", "핵심 개념", "채팅과 프로젝트", "무엇을 쓸까", "실전 예시", "맥락 고르기", "핵심 정리", "더 알아보기"],
