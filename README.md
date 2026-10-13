@@ -16,6 +16,16 @@ Then open <http://localhost:8000>.
 
 You can also open `index.html` directly in a browser.
 
+## The Company version (switched off for now)
+
+Right now everyone sees the **School** version, and only the Language switch is shown. The Company version is still complete in `js/content.js`. To bring back the School ↔ Company switch, open `js/main.js` and change
+
+```js
+const SHOW_COMPANY = false;
+```
+
+to `true`.
+
 ## The two sliders
 
 At the top of the page there are two switches with two positions each:
@@ -30,14 +40,13 @@ At the top of the page there are two switches with two positions each:
 - The page language (`<html lang>`), title and colour theme update with the switches.
 - Keyboard: press **Tab** to reach a switch, then use the **arrow keys** to change it.
 - Each switch is a pair of radio buttons, so screen readers announce the label and which option is selected.
-- To open a specific version, add it to the link, for example `index.html?view=company&lang=ko`.
+- To open a specific version, add it to the link, for example `index.html?lang=ko` (or `?view=company&lang=ko` when the Company version is on).
 
 ## Navigating the page
 
 The page is one continuous scroll, with each section filling one screen. It was checked at 1280×800, 1366×768, 1440×900, 1536×864 and 1920×1080.
 
 - **Section menu** under the sliders: click a section to glide down to it. An underline slides to the section you're reading. On phones, this is a single button that opens the list.
-- **Progress bar**: the thin line under the menu fills up as you go down the page.
 - **Scroll animations**: each section rises in as it scrolls into view, and cards and steps appear one after another. Key phrases get a marker highlight. In browsers that support scroll-linked animation, the opening also shrinks and fades as you scroll past it, and the big section numbers drift slower than the page.
 - **Phones**: the header slides away while you scroll down and comes back when you scroll up.
 - **Links to a section**: for example `index.html?lang=ko#example`.

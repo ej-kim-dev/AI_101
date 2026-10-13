@@ -11,14 +11,23 @@
    live in js/nav.js.
    ========================================================= */
 
-/* ---------- 1. State ----------
-   Defaults: School + English. A link like ?view=company&lang=ko
-   opens a specific version, which is handy when presenting. */
+/* ---------- 1. Settings and state ---------- */
+
+// The Company version is switched off for now: everyone sees School.
+// Change this to true to bring back the School ↔ Company switch.
+// (All the Company text is still in js/content.js.)
+const SHOW_COMPANY = false;
+
+// Defaults: School + English. A link like ?lang=ko opens the Korean
+// version (and ?view=company the Company one, when it's switched on).
 const params = new URLSearchParams(location.search);
 const state = {
-  view: params.get("view") === "company" ? "company" : "school",
+  view: SHOW_COMPANY && params.get("view") === "company" ? "company" : "school",
   lang: params.get("lang") === "ko" ? "ko" : "en",
 };
+
+// Hide the Comparison switch while the Company version is off.
+document.getElementById("view-school").closest(".toggle").hidden = !SHOW_COMPANY;
 
 /* ---------- 2. Helpers ---------- */
 
@@ -311,7 +320,8 @@ document.querySelectorAll(".toggle input").forEach((input) => {
   input.addEventListener("change", () => {
     state[input.name] = input.value;   // only this setting changes; the other is kept
     const url = new URL(location.href);
-    url.searchParams.set("view", state.view);
+    if (SHOW_COMPANY) url.searchParams.set("view", state.view);
+    else url.searchParams.delete("view");
     url.searchParams.set("lang", state.lang);
     history.replaceState(null, "", url);
     render({ announce: true });
