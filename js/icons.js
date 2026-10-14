@@ -36,4 +36,6 @@ const ICONS = {
   "s-context": '<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />', // lucide: filter
   "s-takeaway": '<circle cx="6" cy="19" r="3" /><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /><circle cx="18" cy="5" r="3" />', // lucide: route
   "s-more": '<circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />', // lucide: info
+  copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />', // lucide: copy
+  check: '<path d="M20 6 9 17l-5-5" />', // lucide: check
 };

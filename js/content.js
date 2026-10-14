@@ -15,16 +15,16 @@ const CONTENT = {
   /* ---------------------------------------------------- English */
   en: {
     ui: {
-      docTitle: "Give AI a clear assignment | AI 101",
-      skip: "Skip to presentation",
-      controlsTitle: "Presentation settings",
+      docTitle: "AI-101",
+      skip: "Skip to content",
+      controlsTitle: "Settings",
       viewLegend: "Comparison",
       viewSchool: "School",
       viewCompany: "Company",
       langLegend: "Language",
-      footer: "A learning presentation. Not affiliated with Anthropic or OpenAI.",
+      footer: "AI-101 · A beginner’s guide to AI for the classroom. Not affiliated with Anthropic or OpenAI.",
       status: {
-        school: "Now showing the school version, in English.",
+        school: "The page is now in English.",
         company: "Now showing the company version, in English.",
       },
       // Short names for the section menu at the top
@@ -185,6 +185,10 @@ const CONTENT = {
       eyebrow: "Practical example",
       title: "From vague to clear.",
       vagueLabel: "Vague request",
+      copy: "Copy prompt",
+      copied: "Copied",
+      copiedNote: "Prompt copied. Paste it into Claude to try it.",
+      copyFailed: "Couldn’t copy. Select the text and copy it instead.",
       vague: "Make a presentation.",
       clearLabel: "Clear request",
       // Each piece is either plain text, or { n, text } for a numbered ingredient.
@@ -274,16 +278,16 @@ const CONTENT = {
   /* ---------------------------------------------------- 한국어 */
   ko: {
     ui: {
-      docTitle: "AI에게 분명한 과제 주기 | AI 101",
-      skip: "발표 내용으로 건너뛰기",
-      controlsTitle: "발표 설정",
+      docTitle: "AI-101",
+      skip: "본문으로 건너뛰기",
+      controlsTitle: "설정",
       viewLegend: "비교 방식",
       viewSchool: "학교",
       viewCompany: "회사",
       langLegend: "언어",
-      footer: "학습용 발표 자료입니다. Anthropic 및 OpenAI와 관련이 없습니다.",
+      footer: "AI-101 · 교실을 위한 AI 입문 안내서입니다. Anthropic 및 OpenAI와 관련이 없습니다.",
       status: {
-        school: "학교 버전을 한국어로 보고 있습니다.",
+        school: "이제 한국어로 보고 있습니다.",
         company: "회사 버전을 한국어로 보고 있습니다.",
       },
       // 상단 섹션 메뉴에 쓰는 짧은 이름
@@ -444,6 +448,10 @@ const CONTENT = {
       eyebrow: "실전 예시",
       title: "막연한 요청을 분명한 요청으로.",
       vagueLabel: "막연한 요청",
+      copy: "프롬프트 복사",
+      copied: "복사했어요",
+      copiedNote: "프롬프트를 복사했어요. Claude에 붙여 넣어 직접 해 보세요.",
+      copyFailed: "복사하지 못했어요. 글을 직접 선택해서 복사해 주세요.",
       vague: "발표 자료 만들어 줘.",
       clearLabel: "분명한 요청",
       clear: [

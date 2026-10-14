@@ -1,4 +1,4 @@
-# AI 101: Give AI a clear assignment
+# AI-101: Give AI a clear assignment
 
 A short, bilingual (English / 한국어) presentation website for beginners. It explains how to use AI tools through familiar metaphors, with Claude as the main example.
 
@@ -43,6 +43,10 @@ The look follows apple.com: black, white and greys, big left-aligned headings, f
 
 Icons come from [Lucide](https://lucide.dev), an open-source icon set (ISC license). Apple's own SF Symbols can't be used on other websites. The icons are copied into `js/icons.js`, so the site has no outside dependencies.
 
+## Sharing the link
+
+When the link is shared in KakaoTalk, Slack, iMessage, email or social media, it shows a preview card with the title, a one-line description and the image `assets/og-image.png`. The card comes from the `og:` tags at the top of `index.html`. If the repository or its address changes, update the `og:url` and `og:image` addresses there.
+
 ## Navigating the page
 
 The page is one continuous scroll, with each section filling one screen. It was checked at 1280×800, 1366×768, 1440×900, 1536×864 and 1920×1080.
@@ -55,9 +59,7 @@ The page is one continuous scroll, with each section filling one screen. It was 
 
 Key phrases are written as `==like this==` in `js/content.js`. They appear bold and darken as the section comes into view.
 
-## Design template
-
-The design is saved as a reusable template in the private repository `ej-kim-dev/personal_projects` (folder `design-template/`): the rules (`SKILL.md`, which also works as a Claude skill) and a starter page to copy for new projects.
+The example section has a **Copy prompt** button that copies the clear request, so people can paste it into Claude and try it.
 
 ## Files
 
@@ -67,6 +69,7 @@ The design is saved as a reusable template in the private repository `ej-kim-dev
 | `js/content.js` | **All the words**, in English and Korean. Edit the text here. |
 | `js/main.js` | Builds the sections from the content and runs the switches |
 | `js/icons.js` | The icons (Lucide) |
+| `assets/og-image.png` | The picture shown in link previews |
 | `js/nav.js` | Section menu, scroll tracking and scroll animations |
 | `css/styles.css` | Colours (light and dark), layout, motion and accessibility rules |
 
