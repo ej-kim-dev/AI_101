@@ -1,4 +1,4 @@
-# AI-101: Give AI a clear assignment
+# AI-101: Work with AI like you work with a teacher
 
 A short, bilingual (English / 한국어) presentation website for beginners. It explains how to use AI tools through familiar metaphors, with Claude as the main example.
 
