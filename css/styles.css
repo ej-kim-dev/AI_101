@@ -1,5 +1,5 @@
 /* =========================================================
-   AI 101 — styles
+   AI-101 — styles
    Look and feel modelled on apple.com: black, white and greys,
    big type, full-width bands, borderless rounded cards.
 
@@ -310,6 +310,21 @@ main { display: block; outline: none; }
 .request--vague .request__text { font-size: 1.35rem; line-height: 1.35; color: var(--muted); font-weight: 500; }
 .request--clear { box-shadow: inset 0 0 0 1.5px var(--text); }
 .request__label { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.55rem; }
+.request__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+
+/* "Copy prompt": a small black pill, like Apple's buttons */
+.copy {
+  display: inline-flex; align-items: center; gap: 0.4rem; flex: none;
+  min-height: 34px; padding: 0 0.9rem; margin-top: -0.2rem;
+  font: inherit; font-size: 0.8125rem; font-weight: 600;
+  color: var(--on-accent); background: var(--accent); border: 0; border-radius: 999px; cursor: pointer;
+  transition: opacity 150ms ease, transform 100ms ease-out;
+}
+.copy:hover { opacity: 0.8; }
+.copy:active { transform: scale(0.96); }
+.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.copy__icon { width: 1rem; height: 1rem; }
+.copy.is-done { background: var(--tile); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
 .request__mark { display: grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; font-size: 0.75rem; border: 1.5px solid currentColor; }
 .request--vague .request__label { color: var(--muted); }
 .request__text { font-size: 1.0625rem; line-height: 1.95; }
@@ -499,6 +514,7 @@ main { display: block; outline: none; }
   }
   .chapters a { width: 5.5rem; font-size: 0.8125rem; }
   .toggle__track label { padding: 0 0.7rem; min-height: 36px; }
+  .copy { min-height: 40px; }
 }
 @media (max-width: 380px) {
   .brand { display: none; }

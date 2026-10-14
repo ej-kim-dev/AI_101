@@ -184,7 +184,10 @@ function example(c) {
           <p class="request__text">“${esc(c.vague)}”</p>
         </div>
         <div class="request request--clear">
-          <p class="request__label"><span class="request__mark" aria-hidden="true">✓</span>${esc(c.clearLabel)}</p>
+          <div class="request__head">
+            <p class="request__label"><span class="request__mark" aria-hidden="true">✓</span>${esc(c.clearLabel)}</p>
+            <button class="copy" type="button" data-copy>${icon("copy", "copy__icon")}<span class="copy__text">${esc(c.copy)}</span></button>
+          </div>
           <p class="request__text">${clear}</p>
         </div>
       </div>
@@ -292,6 +295,52 @@ function render({ announce = false } = {}) {
   Nav.afterRender();   // rebuild the section menu and scroll animations (js/nav.js)
   if (announce) document.getElementById("status").textContent = c.ui.status[state.view];
 }
+
+/* ---------- "Copy prompt" button ----------
+   Copies the clear request from the example, so people can paste it
+   straight into Claude and try it. */
+
+// The example request as plain text, in the current language.
+const promptText = () =>
+  CONTENT[state.lang].example.clear.map((part) => (typeof part === "string" ? part : part.text)).join("");
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    // Older browsers, or pages opened straight from a file: copy through a hidden text box.
+    const box = Object.assign(document.createElement("textarea"), { value: text });
+    box.setAttribute("readonly", "");
+    box.style.cssText = "position:fixed;opacity:0";
+    document.body.append(box);
+    box.select();
+    const ok = document.execCommand("copy");
+    box.remove();
+    return ok;
+  }
+}
+
+app.addEventListener("click", async (e) => {
+  const button = e.target.closest("[data-copy]");
+  if (!button) return;
+  const c = CONTENT[state.lang].example;
+  const ok = await copyText(promptText());
+  const status = document.getElementById("status");
+  status.textContent = "";                              // so the same message is read again
+  status.textContent = ok ? c.copiedNote : c.copyFailed;
+  if (!ok) return;
+  // Show "Copied" with a check mark for two seconds, then go back.
+  button.classList.add("is-done");
+  button.querySelector(".copy__text").textContent = c.copied;
+  button.querySelector("svg").innerHTML = ICONS.check;
+  clearTimeout(button.resetTimer);
+  button.resetTimer = setTimeout(() => {
+    button.classList.remove("is-done");
+    button.querySelector(".copy__text").textContent = CONTENT[state.lang].example.copy;
+    button.querySelector("svg").innerHTML = ICONS.copy;
+  }, 2000);
+});
 
 /* ---------- 5. Controls ---------- */
 function syncControls() {
