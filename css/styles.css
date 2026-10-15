@@ -267,34 +267,69 @@ main { display: block; outline: none; }
 .card__body { color: var(--muted); font-size: 0.975rem; line-height: 1.47; }
 .card__note { margin-top: auto; padding-top: 0.7rem; border-top: 1px solid var(--line); font-size: 0.9375rem; font-weight: 500; line-height: 1.45; }
 
-/* 3. Chat vs. project diagram */
-.diagram { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.25rem; align-items: stretch; }
-.diagram__shared, .diagram__chats { padding: 1.4rem; border-radius: var(--radius); background: var(--tile); }
-.diagram__heading { font-weight: 600; margin-bottom: 1rem; font-size: 1.0625rem; }
-.diagram__list { display: grid; gap: 0.75rem; }
-.diagram__item, .chatcard {
-  display: flex; align-items: center; gap: 1rem;
-  padding: 0.9rem 1.1rem; border-radius: 14px; background: var(--bg);
+/* 3. Chat vs. project: picture B (two scenarios side by side) */
+.scen { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(1rem, 2.5vw, 2rem); margin: 0; }
+.scen__col { display: flex; flex-direction: column; gap: 0.75rem; min-width: 0; }
+.scen__head { display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem; font-weight: 600; letter-spacing: -0.015em; }
+.scen__sub { color: var(--muted); font-size: 0.9375rem; margin-top: -0.5rem; }
+/* This heading reads as one sentence: let it use the full width so it fits on one line */
+#distinction .slide__title { max-width: none; }
+.scen__caption { margin-top: clamp(1rem, 3vh, 1.5rem); font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem); font-weight: 600; letter-spacing: -0.015em; line-height: 1.35; color: var(--muted); }
+
+/* Pictures: drawn chat windows (opening and "Chat vs. project") */
+.pic {
+  display: flex; flex-direction: column; min-width: 0; overflow: hidden;
+  border-radius: 22px; background: var(--bg);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--line);
+  font-size: 0.875rem; line-height: 1.45; letter-spacing: -0.01em; text-align: left;
 }
-.slide:nth-of-type(even) .diagram__item, .slide:nth-of-type(even) .chatcard { background: var(--band); }
-.diagram__item strong, .chatcard strong { display: block; font-weight: 600; line-height: 1.3; }
-.diagram__item small, .chatcard small { display: block; color: var(--muted); font-size: 0.9375rem; line-height: 1.4; margin-top: 0.1rem; }
-.chatcard { opacity: 0.55; }
-.chatcard.is-current { opacity: 1; box-shadow: inset 0 0 0 1.5px var(--text); }
-.tag {
-  display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.55rem; margin-bottom: 0.2rem;
-  border-radius: 999px; background: var(--accent); color: var(--on-accent);
+.pic__bar { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--line); }
+.pic__dots { display: flex; gap: 6px; }
+.pic__dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.pic__title { flex: 1; text-align: center; margin-right: 46px; font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+.pic__body { display: flex; flex-direction: column; gap: 0.8rem; padding: 1.1rem 1.1rem 0.6rem; flex: 1; min-width: 0; }
+.pic__me { align-self: flex-end; max-width: 88%; display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+.pic__files { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.35rem; }
+.pic__file { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.6rem; border-radius: 9px; background: var(--band); font-size: 0.75rem; font-weight: 500; }
+.pic__bubble { background: var(--text); color: var(--bg); padding: 0.65rem 0.85rem; border-radius: 17px 17px 6px 17px; }
+.pic__ai { display: flex; gap: 0.6rem; align-items: flex-start; max-width: 94%; }
+.pic__avatar { width: 28px; height: 28px; flex: none; border-radius: 8px; display: grid; place-items: center; background: var(--text); color: var(--bg); }
+.pic__spark { width: 20px; height: 20px; }
+.pic__reply { padding: 0.7rem 0.9rem; border-radius: 17px 17px 17px 6px; background: var(--band); }
+.pic__slide { margin-top: 0.5rem; padding: 0.7rem 0.85rem; border-radius: 10px; background: var(--bg); box-shadow: 0 0 0 1px var(--line), 0 4px 14px rgba(0, 0, 0, 0.06); }
+.pic__slide-title { font-weight: 700; font-size: 0.95rem; letter-spacing: -0.01em; margin-bottom: 0.3rem; }
+.pic__slide ul { list-style: disc; padding-left: 1.1rem; font-size: 0.8rem; line-height: 1.45; color: var(--muted); }
+.pic__input { display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0.9rem 0.9rem; padding: 0.45rem 0.45rem 0.45rem 0.9rem; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); font-size: 0.8125rem; }
+.pic__input > span:first-child { flex: 1; }
+.pic__send { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--text); color: var(--bg); }
+.pic__icon { width: 15px; height: 15px; flex: none; }
+.pic__icon--big { width: 20px; height: 20px; }
+.pic__hint { align-self: flex-end; display: flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.7rem; border-radius: 10px; background: var(--band); font-size: 0.8rem; font-weight: 600; }
+/* Project window: a side panel with the shared files, instructions and chats */
+.pic__split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); flex: 1; min-height: 0; }
+.pic__side { display: flex; flex-direction: column; gap: 0.35rem; padding: 0.9rem 0.8rem; background: var(--band); border-right: 1px solid var(--line); font-size: 0.8rem; min-width: 0; }
+.pic__group { margin-top: 0.4rem; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.pic__group:first-child { margin-top: 0; }
+.pic__row { display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.55rem; border-radius: 9px; background: var(--bg); min-width: 0; }
+.pic__row > span:first-of-type { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pic__row.is-key { box-shadow: inset 0 0 0 1.5px var(--text); font-weight: 600; }
+.pic__note { padding: 0.45rem 0.55rem; border-radius: 9px; background: var(--bg); line-height: 1.4; }
+.pic__tag { margin-left: auto; flex: none; padding: 0.05rem 0.45rem; border-radius: 999px; background: var(--text); color: var(--bg); font-size: 0.625rem; font-weight: 700; white-space: nowrap; }
+:lang(ko) .pic { letter-spacing: 0; }
+
+/* 1. Opening with picture A: text on the left, the chat window on the right,
+   the icon row across the bottom */
+.slide--hero {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-areas: "eye pic" "title pic" "body pic" "chap chap";
+  column-gap: clamp(1.5rem, 4vw, 3.5rem); align-content: center;
 }
-.diagram__flow {
-  align-self: center; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
-  max-width: 8.5rem; text-align: center; font-size: 0.8125rem; font-weight: 500; color: var(--muted);
-}
-.diagram__arrow { display: block; width: 3rem; height: 1.5px; background: var(--text); position: relative; }
-.diagram__arrow::after {
-  content: ""; position: absolute; right: -1px; top: -4px; width: 9px; height: 9px;
-  border-top: 1.5px solid var(--text); border-right: 1.5px solid var(--text); transform: rotate(45deg);
-}
-.diagram__caption { grid-column: 1 / -1; margin-top: 0.75rem; font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem); font-weight: 600; letter-spacing: -0.015em; line-height: 1.35; color: var(--muted); }
+.slide--hero > .eyebrow { grid-area: eye; align-self: end; }
+.slide--hero > .hero__title { grid-area: title; max-width: 16ch; font-size: clamp(2.4rem, 1rem + 2.8vw + 1.2vh, 4.2rem); }
+.slide--hero > .hero__body { grid-area: body; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; margin-top: clamp(1rem, 3vh, 1.5rem); }
+.slide--hero > .pic--chat { grid-area: pic; align-self: center; }
+.slide--hero > .chapters { grid-area: chap; margin: clamp(1rem, 3.5vh, 2.25rem) 0 0; }
+.slide--hero .metaphor { padding: 1.1rem 1.4rem; }
 
 /* 4. Guide */
 .options { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -509,10 +544,28 @@ main { display: block; outline: none; }
   .ingredients li { padding: 0.45rem 0.85rem; font-size: 0.925rem; }
   .sample { margin-top: 0.75rem; padding: 0.9rem 1rem; }
   .sample__metaphor { font-size: 1.02rem; }
-  .diagram__shared, .diagram__chats { padding: 1.1rem; }
-  .diagram__item, .chatcard { padding: 0.7rem 0.95rem; }
+  .pic__body { gap: 0.6rem; padding: 0.9rem 0.9rem 0.5rem; }
+  .pic { font-size: 0.8125rem; }
 }
+/* Shorter screens: the two-scenario picture gets tighter spacing (all text stays) */
+@media (min-width: 1001px) and (max-height: 940px) {
+  .scen { gap: 1.25rem; }
+  .scen__col { gap: 0.55rem; }
+  .scen__head { font-size: 1.05rem; }
+  .scen .pic { font-size: 0.78rem; border-radius: 18px; }
+  .scen .pic__bar { padding: 0.5rem 0.9rem; }
+  .scen .pic__body { gap: 0.5rem; padding: 0.7rem 0.8rem 0.6rem; }
+  .scen .pic__bubble { padding: 0.5rem 0.75rem; }
+  .scen .pic__side { gap: 0.25rem; padding: 0.7rem 0.7rem; }
+  .scen .pic__row, .scen .pic__note { padding: 0.3rem 0.5rem; }
+  .scen__caption { margin-top: 0.9rem; font-size: 1.1rem; }
+  #distinction .note { margin-top: 0.75rem; padding: 0.7rem 1rem; }
+}
+
 @media (min-width: 1001px) and (max-height: 800px) {
+  #distinction .slide__title { margin-bottom: 0.8rem; }
+  .scen .pic__body { padding: 0.55rem 0.75rem 0.5rem; }
+  .scen__caption { margin-top: 0.6rem; }
   .slide { padding-top: 1rem; padding-bottom: 1rem; }
   .card__body { font-size: 0.89rem; }
   .request__text { line-height: 1.7; }
@@ -525,6 +578,17 @@ main { display: block; outline: none; }
 @media (max-width: 1100px) {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+/* Opening on tablets and phones: one column, the picture after the text */
+@media (max-width: 1000px) {
+  .slide--hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "eye" "title" "body" "pic" "chap"; }
+  .slide--hero > .pic--chat { margin-top: 2rem; max-width: 34rem; }
+}
+@media (max-width: 640px) {
+  .pic__split { grid-template-columns: minmax(0, 1fr); }
+  .pic__side { border-right: 0; border-bottom: 1px solid var(--line); }
+  .pic__title { margin-right: 0; }
+}
+
 /* The full section menu needs about 1100px; below that, use the compact dropdown */
 @media (max-width: 1100px) {
   .sectionnav__track { display: none; }
@@ -539,10 +603,7 @@ main { display: block; outline: none; }
   .options { grid-template-columns: minmax(0, 1fr); }
   .flow { grid-template-columns: 1fr 1fr; }
   .flow__step:nth-child(2) .flow__arrow { display: none; }
-  .diagram { grid-template-columns: minmax(0, 1fr); }
-  .diagram__flow { max-width: none; flex-direction: row; justify-self: center; }
-  .diagram__arrow { width: 1.5px; height: 2rem; }
-  .diagram__arrow::after { right: auto; top: auto; left: -4px; bottom: 0; transform: rotate(135deg); }
+  .scen { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 640px) {
   .bar { gap: 0.9rem; }
