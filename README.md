@@ -61,6 +61,8 @@ Key phrases are written as `==like this==` in `js/content.js`. They appear bold 
 
 The example section has a **Copy prompt** button that copies the clear request, so people can paste it into Claude and try it.
 
+The page ends with **Try it yourself**: three steps (copy the example, open Claude, give feedback), with a copy button and a link that opens Claude in a new tab.
+
 ## Files
 
 | File | What it holds |

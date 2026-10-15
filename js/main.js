@@ -43,7 +43,7 @@ const esc = (text) =>
 const rich = (text) => esc(text).replace(/==(.+?)==/g, '<strong class="hl">$1</strong>');
 
 // The order of the sections. nav.js uses the same list.
-const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "context", "takeaway", "more"];
+const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "context", "takeaway", "try", "more"];
 
 
 /* ---------- 3. Icons ----------
@@ -53,7 +53,7 @@ const icon = (name, cls = "icon") =>
   `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[pick(name)] || ""}</svg>`;
 
 // Icons for the row of sections in the opening (same order as SECTION_IDS).
-const SECTION_ICONS = ["s-start", "s-ideas", "s-compare", "s-choose", "s-example", "s-context", "s-takeaway", "s-more"];
+const SECTION_ICONS = ["s-start", "s-ideas", "s-compare", "s-choose", "s-example", "s-context", "s-takeaway", "s-try", "s-more"];
 
 // Section wrapper: every part of the presentation is a card with a heading.
 const section = (id, eyebrow, title, inner, extraClass = "") => `
@@ -92,8 +92,9 @@ function opening(c, nav) {
 
 // 2. Main concepts — a numbered sequence of cards
 function concepts(c) {
+  // The first card ("Chat") spans two columns, so seven cards fill the grid evenly.
   const cards = c.items.map((item, i) => `
-    <li class="card">
+    <li class="card${i === 0 ? " card--wide" : ""}">
       <div class="card__top">
         ${icon(item.icon)}
         <span class="card__num" aria-hidden="true">${i + 1}</span>
@@ -175,7 +176,8 @@ function example(c) {
 
   const bullets = c.slideBullets.map((b) => `<li>${esc(b)}</li>`).join("");
 
-  // Two columns on large screens, so the whole example fits on one screen.
+  // Two balanced rows on large screens: unclear | clear on top,
+  // the five parts | the sample slide below. Fits on one screen.
   return section("example", c.eyebrow, c.title, `
     <div class="example-grid">
       <div class="compare">
@@ -192,11 +194,12 @@ function example(c) {
         </div>
       </div>
 
-      <div class="example-side">
+      <div class="example-parts">
         <h3 class="subhead">${esc(c.ingredientsTitle)}</h3>
         <ol class="ingredients stagger">${list}</ol>
+      </div>
 
-        <div class="sample">
+      <div class="sample">
           <div class="sample__text">
             <p class="sample__metaphor">${esc(pick(c.sampleMetaphor))}</p>
             <p class="sample__why">${esc(c.sampleWhy)}</p>
@@ -209,7 +212,6 @@ function example(c) {
             </div>
             <figcaption class="slidemock__caption">${esc(c.slideCaption)}</figcaption>
           </figure>
-        </div>
       </div>
     </div>`);
 }
@@ -243,7 +245,34 @@ function takeaway(c) {
   </section>`;
 }
 
-// 8. Learn more — native <details>, so it works with keyboard and screen readers
+// 8. Try it yourself — the closing step: copy the example, open Claude, give feedback
+function tryIt(c, newTab) {
+  return section("try", c.eyebrow, c.title, `
+    <p class="lead lead--left">${rich(c.body)}</p>
+    <ol class="try stagger">
+      <li class="try__step">
+        <span class="try__num" aria-hidden="true">1</span>
+        <h3 class="try__title">${esc(c.copyTitle)}</h3>
+        <p class="try__text">${esc(c.copyText)}</p>
+        <button class="copy copy--big" type="button" data-copy>${icon("copy", "copy__icon")}<span class="copy__text">${esc(c.copyButton)}</span></button>
+      </li>
+      <li class="try__step">
+        <span class="try__num" aria-hidden="true">2</span>
+        <h3 class="try__title">${esc(c.openTitle)}</h3>
+        <p class="try__text">${esc(c.openText)}</p>
+        <a class="try__link" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">${esc(c.openButton)}<span class="sr-only"> ${esc(newTab)}</span><span aria-hidden="true"> ↗</span></a>
+      </li>
+      <li class="try__step">
+        <span class="try__num" aria-hidden="true">3</span>
+        <h3 class="try__title">${esc(c.feedbackTitle)}</h3>
+        <p class="try__text">${esc(c.feedbackText)}</p>
+        <p class="try__quote">${esc(c.feedbackExample)}</p>
+      </li>
+    </ol>
+    <p class="tool-note">${esc(c.note)}</p>`);
+}
+
+// 9. Learn more — native <details>, so it works with keyboard and screen readers
 function more(c, wasOpen) {
   const notes = c.notes.map((n) => `<li>${esc(n)}</li>`).join("");
   const sources = c.sources.map((s) => `
@@ -289,6 +318,7 @@ function render({ announce = false } = {}) {
     example(c.example) +
     context(c.context) +
     takeaway(c.takeaway) +
+    tryIt(c.tryIt, c.more.newTab) +
     more(c.more, wasOpen);
 
   syncControls();
@@ -332,12 +362,14 @@ app.addEventListener("click", async (e) => {
   if (!ok) return;
   // Show "Copied" with a check mark for two seconds, then go back.
   button.classList.add("is-done");
-  button.querySelector(".copy__text").textContent = c.copied;
+  const label = button.querySelector(".copy__text");
+  button.dataset.label ??= label.textContent;          // remember this button's own label
+  label.textContent = c.copied;
   button.querySelector("svg").innerHTML = ICONS.check;
   clearTimeout(button.resetTimer);
   button.resetTimer = setTimeout(() => {
     button.classList.remove("is-done");
-    button.querySelector(".copy__text").textContent = CONTENT[state.lang].example.copy;
+    label.textContent = button.dataset.label;
     button.querySelector("svg").innerHTML = ICONS.copy;
   }, 2000);
 });
