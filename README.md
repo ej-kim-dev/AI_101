@@ -43,6 +43,17 @@ The look follows apple.com: black, white and greys, big left-aligned headings, f
 
 Icons come from [Lucide](https://lucide.dev), an open-source icon set (ISC license). Apple's own SF Symbols can't be used on other websites. The icons are copied into `js/icons.js`, so the site has no outside dependencies.
 
+## Pictures and the example
+
+The whole page uses one example: a high-school teacher making a slide that introduces **IB Computer Science SL**, using the IB Computer Science guide.
+
+- **Opening picture:** a chat where the teacher attaches the IB guide, asks for one slide, gets it back, and gives feedback.
+- **"Chat vs. project" picture:** the same task done two ways. With a project, the guide is saved once and every chat can use it. With normal chats, each new chat needs the guide attached again.
+
+The pictures are drawn with HTML and CSS (`chatPicture` and `scenarioPicture` in `js/main.js`), not image files. They switch language, follow dark mode and animate in. They show a generic chat app with the AI-101 spark, not Claude's real screen. Screen readers get a single description of each picture. Their words are in `js/content.js` (`opening.picture` and `distinction.scenarios`).
+
+The Connector cards explain that connecting Google Slides or Canva lets Claude make slides in that app, and connecting Google Drive lets it look through your folders, checked against the official help pages in October 2026.
+
 ## Sharing the link
 
 When the link is shared in KakaoTalk, Slack, iMessage, email or social media, it shows a preview card with the title, a one-line description and the image `assets/og-image.png`. The card comes from the `og:` tags at the top of `index.html`. If the repository or its address changes, update the `og:url` and `og:image` addresses there.

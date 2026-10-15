@@ -52,6 +52,82 @@ const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "
 const icon = (name, cls = "icon") =>
   `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[pick(name)] || ""}</svg>`;
 
+// The AI-101 spark, used as the AI's avatar in the chat pictures.
+const SPARK = `<svg class="pic__spark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M18.10 16.00L16.00 3.80L13.90 16.00ZM17.20 17.20L21.80 10.20L14.80 14.80ZM16.00 18.10L28.20 16.00L16.00 13.90ZM14.80 17.20L21.80 21.80L17.20 14.80ZM13.90 16.00L16.00 28.20L18.10 16.00ZM14.80 14.80L10.20 21.80L17.20 17.20ZM16.00 13.90L3.80 16.00L16.00 18.10ZM17.20 14.80L10.20 10.20L14.80 17.20Z" fill="currentColor" stroke="currentColor" stroke-width="0.9" stroke-linejoin="round"/><circle cx="16" cy="16" r="2.4" fill="currentColor"/></svg>`;
+
+/* ---------- Pictures ----------
+   The chat "screenshots" are drawn with HTML, so they stay sharp, follow the
+   language switch and dark mode, and can animate. They are a generic chat app,
+   not a copy of Claude's real screen. Screen readers get one description
+   (role="img" + aria-label) instead of reading every bubble. */
+const picBar = (title) =>
+  `<div class="pic__bar"><span class="pic__dots"><i></i><i></i><i></i></span><span class="pic__title">${esc(title)}</span></div>`;
+const picFile = (name) => `<span class="pic__file">${icon("file", "pic__icon")}${esc(name)}</span>`;
+const picInput = (text) =>
+  `<div class="pic__input"><span>${esc(text)}</span><span class="pic__send">${icon("arrow-up", "pic__icon")}</span></div>`;
+
+// Picture A: the teacher attaches the IB guide and asks for one slide.
+function chatPicture(p) {
+  const points = p.slidePoints.map((x) => `<li>${esc(x)}</li>`).join("");
+  return `
+    <figure class="pic pic--chat" role="img" aria-label="${esc(p.label)}">
+      ${picBar(p.window)}
+      <div class="pic__body stagger">
+        <div class="pic__me"><div class="pic__files">${picFile(p.file)}</div><p class="pic__bubble">${esc(p.ask)}</p></div>
+        <div class="pic__ai"><span class="pic__avatar">${SPARK}</span>
+          <div class="pic__reply"><p>${esc(p.reply)}</p>
+            <div class="pic__slide"><p class="pic__slide-title">${esc(p.slideTitle)}</p><ul>${points}</ul></div>
+          </div>
+        </div>
+        <div class="pic__me"><p class="pic__bubble">${esc(p.feedback)}</p></div>
+      </div>
+      ${picInput(p.input)}
+    </figure>`;
+}
+
+// Picture B: the same IB task with a project, and with normal chats.
+function scenarioPicture(s) {
+  const p = s.project, n = s.normal;
+  return `
+    <figure class="scen" role="img" aria-label="${esc(s.label)}">
+      <div class="scen__col">
+        <p class="scen__head">${icon("classroom", "pic__icon pic__icon--big")}${esc(p.title)}</p>
+        <p class="scen__sub">${esc(p.sub)}</p>
+        <div class="pic pic--project">
+          ${picBar(p.window)}
+          <div class="pic__split">
+            <div class="pic__side">
+              <p class="pic__group">${esc(p.files)}</p><p class="pic__row is-key">${icon("file", "pic__icon")}<span>${esc(s.file)}</span></p>
+              <p class="pic__group">${esc(p.instructions)}</p><p class="pic__note">${esc(p.instructionsText)}</p>
+              <p class="pic__group">${esc(p.chats)}</p>
+              <p class="pic__row is-key">${icon("chat", "pic__icon")}<span>${esc(p.chat1)}</span><span class="pic__tag">${esc(p.now)}</span></p>
+              <p class="pic__row">${icon("chat", "pic__icon")}<span>${esc(p.chat2)}</span></p>
+            </div>
+            <div class="pic__body stagger">
+              <div class="pic__me"><p class="pic__bubble">${esc(p.ask)}</p></div>
+              <p class="pic__hint">${icon("check", "pic__icon")}${esc(p.hint)}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scen__col">
+        <p class="scen__head">${icon("chat", "pic__icon pic__icon--big")}${esc(n.title)}</p>
+        <p class="scen__sub">${esc(n.sub)}</p>
+        <div class="pic">
+          ${picBar(n.window1)}
+          <div class="pic__body"><div class="pic__me"><div class="pic__files">${picFile(s.file)}</div><p class="pic__bubble">${esc(n.ask1)}</p></div></div>
+        </div>
+        <div class="pic">
+          ${picBar(n.window2)}
+          <div class="pic__body stagger">
+            <div class="pic__me"><div class="pic__files">${picFile(s.file)}</div><p class="pic__bubble">${esc(n.ask2)}</p></div>
+            <p class="pic__hint">${icon("again", "pic__icon")}${esc(n.hint)}</p>
+          </div>
+        </div>
+      </div>
+    </figure>`;
+}
+
 // Icons for the row of sections in the opening (same order as SECTION_IDS).
 const SECTION_ICONS = ["s-start", "s-ideas", "s-compare", "s-choose", "s-example", "s-context", "s-takeaway", "s-try", "s-more"];
 
@@ -73,6 +149,7 @@ function opening(c, nav) {
   <section class="slide slide--hero" id="opening" aria-labelledby="opening-title" tabindex="-1">
     <p class="eyebrow">${esc(c.eyebrow)}</p>
     <h1 class="hero__title" id="opening-title">${esc(c.title)}</h1>
+    ${chatPicture(c.picture)}
     <nav class="chapters" aria-label="${esc(nav.jump)}"><ol class="stagger">${chapters}</ol></nav>
     <div class="hero__body">
       <div>
@@ -109,33 +186,11 @@ function concepts(c) {
   return section("concepts", c.eyebrow, c.title, `<ol class="cards stagger">${cards}</ol>`);
 }
 
-// 3. Chat vs. project — a small diagram made of HTML (so the text translates)
+// 3. Chat vs. project — picture B: the same IB task with a project, and with normal chats
 function distinction(c) {
-  const shared = pick(c.sharedItems).map((s) => `
-    <li class="diagram__item">${icon(s.icon)}<span><strong>${esc(s.label)}</strong><small>${esc(s.sub)}</small></span></li>`).join("");
-  const chats = pick(c.chats).map((ch) => `
-    <li class="chatcard ${ch.current ? "is-current" : ""}">
-      ${icon(c.person)}
-      <span>
-        ${ch.current ? `<span class="tag">${esc(c.currentTag)}</span>` : ""}
-        <strong>${esc(ch.label)}</strong>
-        <small>${esc(ch.sub)}</small>
-      </span>
-    </li>`).join("");
-
   return section("distinction", c.eyebrow, c.title, `
-    <figure class="diagram">
-      <div class="diagram__shared">
-        <p class="diagram__heading">${esc(pick(c.sharedTitle))}</p>
-        <ul class="diagram__list stagger">${shared}</ul>
-      </div>
-      <p class="diagram__flow"><span class="diagram__arrow" aria-hidden="true"></span>${esc(c.flow)}</p>
-      <div class="diagram__chats">
-        <p class="diagram__heading">${esc(c.chatsTitle)}</p>
-        <ul class="diagram__list stagger">${chats}</ul>
-      </div>
-      <figcaption class="diagram__caption">${rich(c.caption)}</figcaption>
-    </figure>
+    ${scenarioPicture(c.scenarios)}
+    <p class="scen__caption">${rich(c.caption)}</p>
     <p class="note">${esc(c.note)}</p>`);
 }
 
