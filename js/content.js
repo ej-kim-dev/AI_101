@@ -36,7 +36,7 @@ const CONTENT = {
         jump: "Jump to a section",
         contents: "Go to section",
         announce: "Section {n} of {total}: {name}",
-        sections: ["Start", "Main ideas", "Chat vs. project", "What to use", "Example", "Materials", "Remember", "Learn more"],
+        sections: ["Start", "Main ideas", "Chat vs. project", "What to use", "Example", "Materials", "Remember", "Try it", "Learn more"],
       },
     },
 
@@ -249,6 +249,22 @@ const CONTENT = {
       review: "Check names, dates and facts, and make sure it followed your instructions.",
     },
 
+    tryIt: {
+      eyebrow: "Your turn",
+      title: "Try it yourself.",
+      body: "Open Claude, paste the example, and see what you get. Then ==give it feedback==, just like you would with a teacher.",
+      copyTitle: "Copy the example",
+      copyText: "Copy the clear request from the example above.",
+      copyButton: "Copy example prompt",
+      openTitle: "Open Claude",
+      openText: "Open Claude in a new tab and paste it in.",
+      openButton: "Open Claude",
+      feedbackTitle: "Give feedback",
+      feedbackText: "Read the result and say what to change.",
+      feedbackExample: "“Make it shorter.”",
+      note: "You’ll need to sign in to Claude. A free account works.",
+    },
+
     more: {
       summary: "Learn more",
       hint: "Good to know, and sources",
@@ -299,7 +315,7 @@ const CONTENT = {
         jump: "섹션으로 바로 가기",
         contents: "섹션 바로가기",
         announce: "{total}개 중 {n}번째 섹션: {name}",
-        sections: ["시작", "핵심 개념", "채팅과 프로젝트", "무엇을 쓸까", "예시", "자료 고르기", "기억하기", "더 알아보기"],
+        sections: ["시작", "핵심 개념", "채팅과 프로젝트", "무엇을 쓸까", "예시", "자료 고르기", "기억하기", "해 보기", "더 알아보기"],
       },
     },
 
@@ -509,6 +525,22 @@ const CONTENT = {
       follow: "“더 짧게 줄이고, 어려운 단어는 쉽게 풀어 줘.”",
       reviewLabel: "확인 예시",
       review: "이름, 날짜, 사실이 맞는지, 그리고 요청한 대로 만들었는지 확인하세요.",
+    },
+
+    tryIt: {
+      eyebrow: "직접 해 보기",
+      title: "이제 직접 해 보세요.",
+      body: "Claude를 열고 예시를 붙여 넣어 결과를 확인해 보세요. 그다음 선생님께 하듯 ==피드백을 주세요==.",
+      copyTitle: "예시 복사하기",
+      copyText: "위 예시의 분명한 요청을 복사해요.",
+      copyButton: "예시 프롬프트 복사",
+      openTitle: "Claude 열기",
+      openText: "새 탭에서 Claude를 열고 붙여 넣어요.",
+      openButton: "Claude 열기",
+      feedbackTitle: "피드백 주기",
+      feedbackText: "결과를 읽고 바꿀 점을 말해 보세요.",
+      feedbackExample: "“더 짧게 줄여 줘.”",
+      note: "Claude에 로그인해야 해요. 무료 계정으로도 할 수 있어요.",
     },
 
     more: {
