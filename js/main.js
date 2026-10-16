@@ -43,7 +43,7 @@ const esc = (text) =>
 const rich = (text) => esc(text).replace(/==(.+?)==/g, '<strong class="hl">$1</strong>');
 
 // The order of the sections. nav.js uses the same list.
-const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "example", "context", "takeaway", "try", "more"];
+const SECTION_IDS = ["opening", "concepts", "distinction", "guide", "rice", "example", "context", "takeaway", "try", "more"];
 
 
 /* ---------- 3. Icons ----------
@@ -129,7 +129,7 @@ function scenarioPicture(s) {
 }
 
 // Icons for the row of sections in the opening (same order as SECTION_IDS).
-const SECTION_ICONS = ["s-start", "s-ideas", "s-compare", "s-choose", "s-example", "s-context", "s-takeaway", "s-try", "s-more"];
+const SECTION_ICONS = ["s-start", "s-ideas", "s-compare", "s-choose", "s-rice", "s-example", "s-context", "s-takeaway", "s-try", "s-more"];
 
 // Section wrapper: every part of the presentation is a card with a heading.
 const section = (id, eyebrow, title, inner, extraClass = "") => `
@@ -219,7 +219,22 @@ function ingredient(part, c) {
   return `<mark class="ing"><span class="ing__lead"><span class="ing__badge" aria-hidden="true">${g.key}</span><span class="sr-only">${esc(hint)}</span>${esc(first)}</span>${esc(rest)}</mark>`;
 }
 
-// 5. Practical example — before/after, the four RICE parts, tiny sample slide
+// 5. RICE — the four parts of a clear prompt, each with a piece of the IB example
+function rice(c) {
+  const cards = c.parts.map((p) => `
+    <li class="rice__card">
+      <span class="rice__key" aria-hidden="true">${esc(p.key)}</span>
+      <h3 class="rice__name"><span class="sr-only">${esc(p.key)}: </span>${esc(p.name)}</h3>
+      <p class="rice__what">${esc(p.what)}</p>
+      <p class="rice__example"><span class="label">${esc(c.exampleLabel)}</span>${esc(p.example)}</p>
+    </li>`).join("");
+  return section("rice", c.eyebrow, c.title, `
+    <p class="lead lead--left">${rich(c.body)}</p>
+    <ol class="rice stagger">${cards}</ol>
+    <p class="tool-note">${esc(c.note)}</p>`);
+}
+
+// 6. Practical example — before/after, the four RICE parts, tiny sample slide
 function example(c) {
   const clear = c.clear.map((part) =>
     typeof part === "string"
@@ -371,6 +386,7 @@ function render({ announce = false } = {}) {
     concepts(c.concepts) +
     distinction(c.distinction) +
     guide(c.guide) +
+    rice(c.rice) +
     example(c.example) +
     context(c.context) +
     takeaway(c.takeaway) +
