@@ -214,11 +214,12 @@ function ingredient(part, c) {
   const space = part.text.indexOf(" ");
   const first = space === -1 ? part.text : part.text.slice(0, space);
   const rest = space === -1 ? "" : part.text.slice(space);
-  const hint = `(${c.ingredientWord} ${part.n}: ${c.ingredients[part.n - 1].name})`;
-  return `<mark class="ing"><span class="ing__lead"><span class="ing__badge" aria-hidden="true">${part.n}</span><span class="sr-only">${esc(hint)}</span>${esc(first)}</span>${esc(rest)}</mark>`;
+  const g = c.ingredients[part.n - 1];        // the RICE part: R, I, C or E
+  const hint = `(${g.key}: ${g.name})`;
+  return `<mark class="ing"><span class="ing__lead"><span class="ing__badge" aria-hidden="true">${g.key}</span><span class="sr-only">${esc(hint)}</span>${esc(first)}</span>${esc(rest)}</mark>`;
 }
 
-// 5. Practical example — before/after, numbered ingredients, tiny sample slide
+// 5. Practical example — before/after, the four RICE parts, tiny sample slide
 function example(c) {
   const clear = c.clear.map((part) =>
     typeof part === "string"
@@ -227,7 +228,7 @@ function example(c) {
   ).join("");
 
   const list = c.ingredients.map((g, i) => `
-    <li><span class="ing__badge" aria-hidden="true">${i + 1}</span><span><strong>${esc(g.name)}</strong> — ${esc(g.detail)}</span></li>`).join("");
+    <li><span class="ing__badge" aria-hidden="true">${g.key}</span><span><strong>${esc(g.name)}</strong> — ${esc(g.detail)}</span></li>`).join("");
 
   const bullets = c.slideBullets.map((b) => `<li>${esc(b)}</li>`).join("");
 

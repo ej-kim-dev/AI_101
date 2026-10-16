@@ -70,7 +70,7 @@ The page is one continuous scroll, with each section filling one screen. It was 
 
 Key phrases are written as `==like this==` in `js/content.js`. They appear bold and darken as the section comes into view.
 
-The example section has a **Copy prompt** button that copies the clear request, so people can paste it into Claude and try it.
+The example's clear request follows **RICE**, the prompt format EJ recommends: **R**ole, **I**nstruction, **C**ontext, **E**xample. Each part is marked with its letter, and the list under it explains the four parts. The **Copy prompt** button copies the whole request, so people can paste it into Claude and try it.
 
 The page ends with **Try it yourself**: three steps (copy the example, open Claude, give feedback), with a copy button and a link that opens Claude in a new tab.
 
