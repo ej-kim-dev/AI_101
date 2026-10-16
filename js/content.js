@@ -36,7 +36,7 @@ const CONTENT = {
         jump: "Jump to a section",
         contents: "Go to section",
         announce: "Section {n} of {total}: {name}",
-        sections: ["Start", "Main ideas", "Chat vs. project", "What to use", "Example", "Materials", "Remember", "Try it", "Learn more"],
+        sections: ["Start", "Main ideas", "Chat vs. project", "What to use", "RICE", "Example", "Materials", "Remember", "Try it", "Learn more"],
       },
     },
 
@@ -199,6 +199,22 @@ const CONTENT = {
       together: "You can mix them. A chat in a project ==can use a connector too==.",
     },
 
+    // How to write a prompt: RICE (Role, Instruction, Context, Example).
+    // Each part's example is a piece of the same IB Computer Science prompt.
+    rice: {
+      eyebrow: "How to ask",
+      title: "Write prompts with RICE.",
+      body: "Four parts make a clear prompt. You won’t always need all four, but ==each one helps==.",
+      exampleLabel: "Example",
+      parts: [
+        { key: "R", name: "Role", what: "Tell Claude who to be.", example: "“You are an experienced IB Computer Science teacher.”" },
+        { key: "I", name: "Instruction", what: "Say exactly what to make.", example: "“Create one slide that introduces IB CS SL to new students.”" },
+        { key: "C", name: "Context", what: "Share the background and materials.", example: "“My students are new to the course. Use the attached IB guide.”" },
+        { key: "E", name: "Example", what: "Show what good looks like.", example: "“Follow the attached sample slide’s format.”" },
+      ],
+      note: "Next: all four parts together in one prompt.",
+    },
+
     example: {
       eyebrow: "Example",
       title: "From unclear to clear.",
@@ -329,7 +345,7 @@ const CONTENT = {
         jump: "섹션으로 바로 가기",
         contents: "섹션 바로가기",
         announce: "{total}개 중 {n}번째 섹션: {name}",
-        sections: ["시작", "핵심 개념", "채팅과 프로젝트", "무엇을 쓸까", "예시", "자료 고르기", "기억하기", "해 보기", "더 알아보기"],
+        sections: ["시작", "핵심 개념", "채팅과 프로젝트", "무엇을 쓸까", "RICE", "예시", "자료 고르기", "기억하기", "해 보기", "더 알아보기"],
       },
     },
 
@@ -490,6 +506,22 @@ const CONTENT = {
         },
       ],
       together: "함께 쓸 수도 있어요. 프로젝트 안의 채팅에서도 ==커넥터를 쓸 수 있어요==.",
+    },
+
+    // 프롬프트 쓰는 법: RICE (역할, 지시, 맥락, 예시).
+    // 각 예시는 같은 IB 컴퓨터 과학 프롬프트의 한 부분이에요.
+    rice: {
+      eyebrow: "프롬프트 쓰는 법",
+      title: "RICE로 프롬프트를 써 보세요.",
+      body: "네 가지가 분명한 프롬프트를 만들어요. 매번 넷 다 필요하진 않지만, ==하나하나가 도움이 돼요==.",
+      exampleLabel: "예시",
+      parts: [
+        { key: "R", name: "역할", what: "Claude가 누구의 입장에서 답할지 알려 주세요.", example: "“경험 많은 IB 컴퓨터 과학 선생님의 입장에서 답해 주세요.”" },
+        { key: "I", name: "지시", what: "무엇을 만들지 정확히 말해 주세요.", example: "“새 학생들에게 IB CS SL을 소개하는 슬라이드 한 장을 만들어 주세요.”" },
+        { key: "C", name: "맥락", what: "배경과 자료를 알려 주세요.", example: "“학생들은 이 과정을 처음 들어요. 첨부한 IB 가이드를 사용해 주세요.”" },
+        { key: "E", name: "예시", what: "원하는 모양을 보여 주세요.", example: "“첨부한 예시 슬라이드 형식에 맞춰 주세요.”" },
+      ],
+      note: "다음 섹션에서 네 가지를 합친 전체 프롬프트를 볼 수 있어요.",
     },
 
     example: {
