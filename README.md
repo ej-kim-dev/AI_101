@@ -4,28 +4,6 @@ A short, bilingual (English / 한국어) presentation website for beginners. It 
 
 Plain HTML, CSS and JavaScript. No build step, no dependencies, no sign-in, no backend.
 
-## Preview it
-
-From the repository folder:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then open <http://localhost:8000>.
-
-You can also open `index.html` directly in a browser.
-
-## The Company version (switched off for now)
-
-Right now everyone sees the **School** version, and only the Language switch is shown. The Company version is still complete in `js/content.js`. To bring back the School ↔ Company switch, open `js/main.js` and change
-
-```js
-const SHOW_COMPANY = false;
-```
-
-to `true`.
-
 ## The switches
 
 The **language switch** (English ↔ 한국어) sits at the top right. The School ↔ Company switch sits next to it when it's turned on (see above).
