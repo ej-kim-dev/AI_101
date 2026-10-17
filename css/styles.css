@@ -113,7 +113,7 @@ svg { display: block; }
 .toggle__track label {
   position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
   min-height: 32px; padding: 0 0.9rem; border-radius: 999px;
-  font-size: 0.8125rem; font-weight: 500; color: var(--muted);
+  font-size: 0.8125rem; font-weight: 500; color: #5e5e63;   /* a little darker than --muted, so it stays readable on the grey track */
   cursor: pointer; user-select: none; white-space: nowrap;
   transition: color 150ms ease, transform 100ms ease-out;
 }
@@ -126,7 +126,10 @@ svg { display: block; }
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
   transition: transform 280ms var(--ease);
 }
-@media (prefers-color-scheme: dark) { .toggle__thumb { background: #636366; } }
+@media (prefers-color-scheme: dark) {
+  .toggle__track label { color: var(--muted); }
+  .toggle__thumb { background: #636366; }
+}
 .toggle__track[data-pos="1"] .toggle__thumb { transform: translateX(100%); }
 .toggle__track input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -425,8 +428,10 @@ main { display: block; outline: none; }
 }
 .checks span { font-weight: 700; }
 
-/* 7. Takeaway: a black band, like Apple's dark sections */
-.slide--takeaway {
+/* 7. Takeaway: a black band, like Apple's dark sections.
+   ".slide.slide--takeaway" is stronger than ".slide:nth-of-type(even)",
+   so the band keeps its own card colour wherever it sits in the page. */
+.slide.slide--takeaway {
   background: var(--inverse-bg) !important;
   --text: var(--inverse-text); --muted: var(--inverse-muted); --tile: var(--inverse-tile);
   color: var(--text);
